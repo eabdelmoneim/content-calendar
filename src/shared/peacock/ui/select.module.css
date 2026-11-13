@@ -1,0 +1,21 @@
+.wrap {
+  position: relative;
+  display: flex;
+  min-width: 0;
+}
+
+.select {
+  appearance: none;
+  padding-right: calc(10px + 14px + var(--space-2));
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+
+.chevron {
+  position: absolute;
+  top: 50%;
+  right: var(--space-2);
+  color: var(--fg-subtle);
+  transform: translateY(-50%);
+  pointer-events: none;
+}

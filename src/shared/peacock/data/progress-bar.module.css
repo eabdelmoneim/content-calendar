@@ -1,0 +1,43 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.track {
+  display: block;
+  flex-shrink: 0;
+  width: 56px;
+  height: 4px;
+  overflow: hidden;
+  border-radius: var(--radius-progress);
+  background: var(--progress-track);
+}
+
+.wide {
+  width: 64px;
+}
+
+.fluidRoot {
+  display: flex;
+  width: 100%;
+}
+
+.fluid {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-progress);
+  background: var(--primary);
+}
+
+.value {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

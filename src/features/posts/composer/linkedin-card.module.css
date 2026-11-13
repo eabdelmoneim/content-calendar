@@ -1,0 +1,330 @@
+/* Subset of Peacock's features/linkedin-card/post-card.module.css (composer preview only), verbatim. */
+/* ---------- tokens ---------- */
+
+.preview {
+  --li-card-bg: var(--bg);
+  --li-border: var(--border);
+  --li-divider: var(--border);
+  --li-text: var(--fg);
+  --li-text-strong: var(--fg);
+  --li-text-muted: var(--fg-subtle);
+  --li-icon: var(--fg-subtle);
+  --li-link: #0a66c2;
+  --li-link-hover: var(--brand-linkedin);
+  --li-hover: var(--bg-hover);
+  --li-tile-bg: var(--bg-subtle);
+  --li-images-bg: var(--bg-muted);
+  --li-overlay: var(--overlay);
+  --li-overlay-fg: var(--neutral-0);
+}
+
+
+/* ---------- card ---------- */
+
+/* Calibrated to the user-selected Typegrow preview, November 2026. */
+.card {
+  box-sizing: border-box;
+  transform-origin: top left;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--li-border);
+  border-radius: 8px;
+  background: var(--li-card-bg);
+  color: var(--li-text);
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Ubuntu,
+    Oxygen,
+    Cantarell,
+    "Fira Sans",
+    "Droid Sans",
+    "Helvetica Neue",
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: normal;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- author row ---------- */
+
+.author {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 16px 16px 10px;
+}
+
+.authorDetails {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.authorDetails strong,
+.authorDetails > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.authorDetails strong {
+  font-size: var(--text-14);
+  font-weight: var(--weight-semibold);
+}
+
+.authorDetails > span {
+  color: var(--li-text-muted);
+  font-size: var(--text-12);
+  line-height: 16px;
+}
+
+.visibility {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.authorLink,
+.timeLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.authorLink:hover,
+.timeLink:hover {
+  color: var(--li-link);
+  text-decoration: underline;
+}
+
+.moreIcon {
+  flex-shrink: 0;
+  color: var(--li-text-muted);
+}
+
+/* ---------- text ---------- */
+
+.body {
+  padding: 4px 24px 8px 16px;
+}
+
+.textContainer {
+  position: relative;
+}
+
+.textContainer[data-collapsed="true"] {
+  /* Hidden overflow can retain a scroll offset when collapsing after focus or
+     scroll anchoring. Clip must always show the opening lines of the post. */
+  overflow: clip;
+}
+
+.text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 20px;
+}
+
+.mention {
+  color: var(--li-link);
+  font-weight: 600;
+}
+
+.hashtag,
+.textLink {
+  color: var(--li-link);
+  font-weight: 600;
+}
+
+.textLink {
+  text-decoration: none;
+}
+
+.textLink:hover {
+  text-decoration: underline;
+}
+
+.text[data-placeholder="true"] {
+  color: var(--li-text-muted);
+}
+
+.seeMore,
+.seeLess {
+  border: 0;
+  color: var(--li-text-muted);
+  font: inherit;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.seeMore {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 0;
+  background: var(--li-card-bg);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.seeMore,
+.moreMeasure {
+  padding-left: 12.8px;
+}
+
+.moreMeasure {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.seeLess {
+  display: block;
+  margin-top: 4px;
+  margin-left: auto;
+  padding: 0;
+  background: transparent;
+}
+
+.seeMore:hover,
+.seeLess:hover {
+  color: var(--li-link-hover);
+  text-decoration: underline;
+}
+
+/* Typegrow: rgba(0,0,0,.6), underlined. */
+/* ---------- images ---------- */
+
+.images {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px;
+  aspect-ratio: 1.35;
+  background: var(--li-images-bg);
+}
+
+.images[data-count="1"] {
+  display: block;
+  aspect-ratio: auto;
+}
+
+.imageTile {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.imageTile img,
+.imageTile video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.images[data-count="1"] img,
+.images[data-count="1"] video {
+  height: auto;
+  max-height: 480px;
+  object-fit: contain;
+}
+
+.images[data-count="3"] .imageTile:first-child {
+  grid-row: span 2;
+}
+
+.images[data-count="5"] {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-rows: 3fr 2fr;
+}
+
+.images[data-count="5"] .imageTile {
+  grid-column: span 2;
+}
+
+.images[data-count="5"] .imageTile:nth-child(-n + 2) {
+  grid-column: span 3;
+}
+
+/* Feed: LinkedIn's layouts. One large tile above smaller ones for 3 and 4. */
+.moreImages {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--li-overlay);
+  color: var(--li-overlay-fg);
+  font-size: var(--text-28);
+  font-weight: var(--weight-semibold);
+}
+
+.unavailableImage {
+  display: flex;
+  height: 100%;
+  min-height: 100px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 20px;
+  background: var(--li-tile-bg);
+  color: var(--li-text-muted);
+  text-align: center;
+  font-size: var(--text-12);
+  line-height: 18px;
+}
+
+/* ---------- action bar ---------- */
+
+.actions {
+  display: flex;
+  justify-content: space-around;
+  gap: 6px;
+  margin: 0 12px;
+  padding: 13px 0;
+  border-top: 1px solid var(--li-divider);
+  color: var(--li-icon);
+  font-size: var(--text-13);
+  font-weight: var(--weight-semibold);
+}
+
+.actions > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.preview[data-device="mobile"] .actions > span {
+  flex-direction: column;
+  gap: 3px;
+  font-size: var(--text-12);
+}
+
+@media (max-width: 600px) {
+  .preview .actions > span {
+    flex-direction: column;
+    gap: 3px;
+    font-size: var(--text-12);
+  }
+}
+

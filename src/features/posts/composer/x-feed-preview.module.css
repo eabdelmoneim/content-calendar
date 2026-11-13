@@ -1,0 +1,185 @@
+/* COMPONENTS.md > FeedPreview, X variant: an approximation of an X timeline post. */
+.preview {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.heading {
+  height: 52px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 0 var(--space-4);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-subtle);
+}
+
+.heading h3 {
+  margin: 0;
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  font-weight: var(--weight-semibold);
+  white-space: nowrap;
+}
+
+.deviceLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.feed {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: var(--space-6) var(--space-4);
+  overflow: auto;
+  background: var(--bg-muted);
+}
+
+.scaledCard {
+  flex-shrink: 0;
+}
+
+/* Measured from an X web timeline post on October 26, 2026: 598px post,
+   16px side padding, 40px avatar, 8px column gap, 15px/20px post text. */
+.card {
+  box-sizing: border-box;
+  transform-origin: top left;
+  padding: 12px 16px 11px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--fg);
+  font-family:
+    TwitterChirp,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  font-size: var(--text-15);
+  line-height: 20px;
+}
+
+.postContent {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 8px;
+}
+
+.postMain {
+  min-width: 0;
+}
+
+.authorLine {
+  display: flex;
+  align-items: center;
+  min-height: 20px;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.authorLine strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: var(--weight-semibold);
+}
+
+.authorLine span,
+.moreIcon {
+  color: var(--fg-subtle);
+}
+
+.authorLine span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.moreIcon {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.postText {
+  margin-top: 2px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.postText[data-placeholder="true"] {
+  color: var(--fg-subtle);
+}
+
+.showMore {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+  font: inherit;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 20px;
+  margin-top: 12px;
+  color: var(--fg-subtle);
+}
+
+.hint {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 10px var(--space-4);
+  border-top: 1px solid var(--border);
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+}
+
+@media (max-width: 600px) {
+  .feed {
+    padding: 12px;
+  }
+}
+
+/* Content Calendar: attached images, X's rounded 2-column media block (max 4). */
+.media {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px;
+  margin-top: 12px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.media[data-count="1"] {
+  grid-template-columns: 1fr;
+}
+
+.media[data-count="3"] > :first-child {
+  grid-row: span 2;
+}
+
+.media img,
+.media video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+}

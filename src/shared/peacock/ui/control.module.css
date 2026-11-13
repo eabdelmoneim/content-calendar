@@ -1,0 +1,64 @@
+/* Shared box for Input, Select, Textarea and Combobox
+ * (COMPONENTS.md › Input / Select / Combobox / Textarea). */
+.control {
+  width: 100%;
+  min-width: 0;
+  height: var(--control-md);
+  padding: 0 10px;
+  border: var(--border-width) solid var(--border-control);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  box-shadow: var(--shadow-control);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  outline: none;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease);
+}
+
+.control::placeholder {
+  color: var(--fg-placeholder);
+}
+
+.control:hover:not(:disabled) {
+  border-color: var(--border-strong);
+}
+
+/* Focus: 1px primary border plus 3px halo, no outline (overrides the global
+ * :focus-visible outline in tokens.css). */
+.control:focus,
+.control:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-ring);
+}
+
+.control:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.control[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+.control[aria-invalid="true"]:focus,
+.control[aria-invalid="true"]:focus-visible {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px var(--danger-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control {
+    transition: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .control {
+    height: var(--touch-min);
+  }
+}

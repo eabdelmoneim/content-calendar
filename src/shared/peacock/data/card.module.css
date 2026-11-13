@@ -1,0 +1,88 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+  color: var(--fg);
+  box-shadow: 0 0 0 var(--border-width) var(--border);
+  font-family: var(--font-sans);
+}
+
+/* Chart / distribution cards: 18px 20px 16px (AnalyticsScreen). */
+.padded {
+  gap: 6px;
+  padding: 18px var(--space-5) var(--space-4);
+}
+
+/* Table cards: the table insets itself 12px; the header keeps 20px sides. */
+.flush {
+  padding: var(--space-4) 0 6px;
+}
+
+.flush > .header {
+  padding: 0 var(--space-5) 14px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.tile {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--control-sm);
+  height: var(--control-sm);
+  border-radius: var(--radius-tile);
+  box-shadow: inset 0 0 0 var(--border-width) var(--border);
+  color: var(--fg-muted);
+}
+
+.tileLg {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-md);
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  font-size: var(--text-14);
+  line-height: var(--lh-14);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.link {
+  border-radius: var(--radius-sm);
+  color: var(--primary);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}

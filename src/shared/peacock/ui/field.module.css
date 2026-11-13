@@ -1,0 +1,29 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+
+.label {
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  font-weight: var(--weight-medium);
+  color: var(--fg);
+}
+
+.hint,
+.error {
+  margin: 0;
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+}
+
+.hint {
+  color: var(--fg-subtle);
+}
+
+.error {
+  color: var(--danger);
+}

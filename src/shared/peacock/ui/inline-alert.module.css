@@ -1,0 +1,88 @@
+.alert {
+  --alert-fg: var(--info);
+  --alert-bg: var(--info-bg);
+  --alert-border: var(--info-border);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--alert-bg);
+  box-shadow: inset 0 0 0 var(--border-width) var(--alert-border);
+  color: var(--alert-fg);
+  font-family: var(--font-sans);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+}
+
+.info {
+  --alert-fg: var(--info);
+  --alert-bg: var(--info-bg);
+  --alert-border: var(--info-border);
+}
+
+.warning {
+  --alert-fg: var(--warning);
+  --alert-bg: var(--warning-bg);
+  --alert-border: var(--warning-border);
+}
+
+.danger {
+  --alert-fg: var(--danger);
+  --alert-bg: var(--danger-bg);
+  --alert-border: var(--danger-border);
+}
+
+.success {
+  --alert-fg: var(--success);
+  --alert-bg: var(--success-bg);
+  --alert-border: var(--success-border);
+}
+
+/* Needs a person: the strong amber used by needs_review / uncertain chips. */
+.review {
+  --alert-fg: var(--chip-review-fg);
+  --alert-bg: var(--chip-review-bg);
+  --alert-border: var(--chip-review-border);
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+  text-wrap: pretty;
+}
+
+.body > p {
+  margin: 0;
+}
+
+.action {
+  flex-shrink: 0;
+  font-weight: var(--weight-medium);
+}
+
+.action a,
+.action button {
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.action a:focus-visible,
+.action button:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: none;
+  border-radius: 2px;
+}

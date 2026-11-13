@@ -1,0 +1,12 @@
+.textarea {
+  height: auto;
+  min-height: calc(var(--control-md) * 2);
+  padding: 7px 10px;
+  resize: vertical;
+}
+
+@media (max-width: 767px) {
+  .textarea {
+    height: auto;
+  }
+}

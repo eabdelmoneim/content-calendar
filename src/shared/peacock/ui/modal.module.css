@@ -1,0 +1,47 @@
+/* The <dialog> itself is the full-viewport overlay; its ::backdrop stays
+ * transparent because custom properties do not reliably reach ::backdrop. */
+.dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--overlay);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  animation: overlay-in var(--dur-slow) var(--ease);
+}
+
+.dialog::backdrop {
+  background: transparent;
+}
+
+.dialog:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.panel {
+  min-width: 0;
+}
+
+.panel:focus-visible {
+  outline: none;
+}
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+}

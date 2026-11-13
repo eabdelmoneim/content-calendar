@@ -1,0 +1,9 @@
+.linkedin {
+  flex-shrink: 0;
+  fill: var(--brand-linkedin);
+}
+
+.x {
+  flex-shrink: 0;
+  fill: currentColor;
+}

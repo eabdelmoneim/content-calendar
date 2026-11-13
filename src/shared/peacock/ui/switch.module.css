@@ -1,0 +1,100 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-width: 0;
+  color: var(--fg);
+  font-family: var(--font-sans);
+}
+
+.disabled {
+  opacity: 0.4;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.label {
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+}
+
+.disabled .label {
+  cursor: not-allowed;
+}
+
+.description {
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+}
+
+.track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: var(--space-5);
+  padding: 2px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--switch-track-off);
+  box-shadow: none;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease);
+}
+
+.track:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.track:disabled {
+  cursor: not-allowed;
+}
+
+/* Without the label wrapper the track carries the disabled dimming itself. */
+.standalone:disabled {
+  opacity: 0.4;
+}
+
+.on {
+  background: var(--primary);
+}
+
+.thumb {
+  width: var(--space-4);
+  height: var(--space-4);
+  border-radius: var(--radius-full);
+  background: var(--switch-thumb);
+  box-shadow: var(--shadow-control);
+  transition: transform var(--dur-fast) var(--ease);
+}
+
+.on .thumb {
+  transform: translateX(var(--space-4));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track,
+  .thumb {
+    transition: none;
+  }
+}
+
+/* 44px hit area on touch layouts without changing the 36×20 visual. */
+@media (max-width: 767px) {
+  .track::after {
+    content: "";
+    position: absolute;
+    inset: calc((var(--touch-min) - var(--space-5)) / -2) -4px;
+  }
+}

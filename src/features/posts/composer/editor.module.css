@@ -1,0 +1,212 @@
+/* Rich text editor and upload list inside the Composer (SCREENS.md › Composer). */
+.editorShell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.selectionComment {
+  position: absolute;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  color: var(--primary);
+  box-shadow: var(--shadow-control);
+  cursor: pointer;
+}
+
+.selectionComment:hover {
+  background: var(--primary-subtle);
+}
+
+.selectionComment:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.formatToolbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  margin: 0 -4px;
+  padding: var(--space-1);
+  border-radius: var(--radius-item);
+  background: var(--bg);
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.formatToolbar button {
+  display: inline-grid;
+  place-items: center;
+  min-width: var(--control-sm);
+  height: var(--control-sm);
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--fg-muted);
+  font: inherit;
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+}
+
+.formatToolbar button:hover:not(:disabled),
+.formatToolbar button[aria-pressed="true"] {
+  background: var(--bg-muted);
+  color: var(--fg);
+}
+
+.formatToolbar button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.toolbarDivider {
+  width: 1px;
+  height: 16px;
+  margin: 0 var(--space-1);
+  background: var(--border);
+}
+
+.editorProse {
+  min-height: 260px;
+  outline: none;
+  color: var(--fg);
+  font-size: var(--text-16);
+  line-height: 26px;
+}
+
+.editorProse p {
+  margin: 0 0 14px;
+}
+
+.editorProse p:last-child {
+  margin-bottom: 0;
+}
+
+.editorProse ul,
+.editorProse ol {
+  margin: 0 0 14px;
+  padding-left: 22px;
+}
+
+/* Tailwind Preflight removes native markers from every ul/ol. Restore them
+   only for editable post content, leaving application lists unchanged. */
+.editorProse ul {
+  list-style-type: disc;
+}
+
+.editorProse ol {
+  list-style-type: decimal;
+}
+
+.editorProse a {
+  color: var(--primary);
+}
+
+/* "What do you want to say?" while the document is one empty paragraph. */
+.editorProse > p:only-child:has(> br:only-child)::before {
+  content: "What do you want to say?";
+  float: left;
+  height: 0;
+  color: var(--fg-placeholder);
+  pointer-events: none;
+}
+
+.imageUploads {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.imageUploads li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-item);
+  box-shadow: inset 0 0 0 1px var(--border);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+}
+
+.imageUploads img {
+  display: block;
+  grid-column: 1 / -1;
+  width: 100%;
+  max-height: 240px;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+}
+
+.imageUploads li > div {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.imageUploads strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: var(--weight-medium);
+}
+
+.imageUploads span {
+  color: var(--fg-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+.imageUploads progress {
+  width: 100%;
+  height: 4px;
+  accent-color: var(--primary);
+}
+
+.imageUploads button {
+  justify-self: start;
+  padding: var(--space-1);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--fg-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.imageUploads button:hover:not(:disabled) {
+  background: var(--bg-muted);
+  color: var(--fg);
+}
+
+.imageUploads button:disabled {
+  cursor: wait;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .imageUploads :global(.lucide-loader-circle) {
+    animation: editor-spin 0.9s linear infinite;
+  }
+}
+
+@keyframes editor-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

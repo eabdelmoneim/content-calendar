@@ -1,0 +1,32 @@
+/* Circular brand image; surface variants retain the same layout contract. */
+
+.mark {
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.auto {
+  display: inline-grid;
+  flex-shrink: 0;
+}
+
+.auto > .mark {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+}
+
+.onDark {
+  display: none;
+}
+
+:global([data-theme="dark"]) .onLight {
+  display: none;
+}
+
+:global([data-theme="dark"]) .onDark {
+  display: block;
+}

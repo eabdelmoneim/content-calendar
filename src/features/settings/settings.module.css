@@ -1,0 +1,557 @@
+/* Settings (SCREENS.md › Settings and Admin). Tokens only. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  color: var(--fg);
+}
+
+/* ---- tabs ---- */
+
+.tabBar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  /* Room for the Members action on every tab, so the tabs never jump. */
+  min-height: calc(var(--control-md) + 10px);
+  border-bottom: var(--border-width) solid var(--border);
+}
+
+.tabBar .tabs {
+  border-bottom: 0;
+}
+
+.tabAction {
+  padding-bottom: 10px;
+}
+
+.tabIcon {
+  display: inline-flex;
+}
+
+.pills {
+  display: none;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.panel:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
+}
+
+.note {
+  margin: 0;
+  color: var(--fg-subtle);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+}
+
+.shield {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+}
+
+.shield svg {
+  flex-shrink: 0;
+}
+
+/* ---- in-card table (DESIGN.md › Tables inside cards) ---- */
+
+.card {
+  padding: var(--space-3) 0;
+}
+
+.table {
+  min-width: 0;
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: var(--settings-cols);
+  align-items: center;
+  gap: var(--space-4);
+  margin: 0 var(--space-3);
+  padding: 0 var(--space-3);
+}
+
+.membersGrid {
+  --settings-cols: minmax(0, 2fr) 130px minmax(0, 1fr) 32px;
+}
+
+.accountsGrid {
+  --settings-cols: minmax(0, 2fr) 140px minmax(0, 1.4fr) 130px;
+}
+
+.xGrid {
+  --settings-cols: minmax(0, 2fr) 140px minmax(0, 1.4fr) 130px 32px;
+}
+
+.profilesGrid {
+  --settings-cols: minmax(0, 1.6fr) minmax(0, 1.4fr) minmax(0, 1fr) 170px;
+}
+
+.head {
+  height: 34px;
+  border-radius: var(--radius-md);
+  background: var(--bg-canvas);
+  color: var(--fg-subtle);
+  font-size: var(--text-11);
+  line-height: var(--lh-11);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.headCell {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.row {
+  min-height: 56px;
+  padding-top: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: var(--border-width) solid var(--border-row);
+  font-variant-numeric: tabular-nums;
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.endCell {
+  justify-content: flex-end;
+}
+
+.chips {
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.entity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.entityText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.entityTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+
+.entityName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.entitySub {
+  overflow: hidden;
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.you {
+  flex-shrink: 0;
+  padding: 0 6px;
+  border-radius: var(--radius-delta);
+  background: var(--bg-muted);
+  color: var(--fg-muted);
+  font-size: var(--text-11);
+  line-height: var(--lh-badge);
+  font-weight: var(--weight-medium);
+}
+
+.muted {
+  overflow: hidden;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.attention {
+  overflow: hidden;
+  color: var(--warning);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mobileMeta {
+  display: none;
+}
+
+/* "Open LinkedIn": a link styled as the secondary small button. */
+.linkButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: var(--control-sm);
+  padding: 0 10px;
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  box-shadow:
+    inset 0 0 0 var(--border-width) var(--border-control),
+    var(--shadow-control);
+  color: var(--fg);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  transition: background var(--dur-fast) var(--ease);
+}
+
+.linkButton:hover {
+  background: var(--bg-hover);
+}
+
+.linkButton:focus-visible,
+.inlineLink:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* LinkedIn URL / X handle cells: a quiet link out to the account. */
+.accountLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  color: var(--fg-muted);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+}
+
+.accountLink svg {
+  flex-shrink: 0;
+}
+
+.accountLink:hover {
+  color: var(--fg);
+  text-decoration: underline;
+}
+
+.accountLink:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.rowActions {
+  gap: var(--space-2);
+}
+
+.inlineLink {
+  color: var(--primary-fg);
+  font-weight: var(--weight-medium);
+  border-radius: var(--radius-sm);
+}
+
+.inlineLink:hover {
+  text-decoration: underline;
+}
+
+.empty {
+  padding: var(--space-6) var(--space-5);
+}
+
+.skeletonRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 56px;
+  margin: 0 var(--space-6);
+}
+
+/* ---- menus and dialogs ---- */
+
+.menuLabel {
+  padding: 6px var(--space-2) var(--space-1);
+  color: var(--fg-subtle);
+  font-size: var(--text-11);
+  line-height: var(--lh-11);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.menuRadio {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  height: var(--control-md);
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  text-align: left;
+  cursor: pointer;
+}
+
+.menuRadio:hover,
+.menuRadio:focus-visible {
+  background: var(--bg-hover);
+  outline: none;
+}
+
+.menuRadio:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.menuRadioLabel {
+  flex: 1;
+}
+
+.menuSeparator {
+  height: var(--border-width);
+  margin: var(--space-1) 0;
+  background: var(--border);
+}
+
+.menuDanger {
+  color: var(--danger);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.roleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.roleLegend {
+  margin-bottom: 6px;
+  padding: 0;
+  color: var(--fg);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  font-weight: var(--weight-medium);
+}
+
+.roleOption {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  padding: 10px var(--space-3);
+  border-radius: var(--radius-item);
+  box-shadow: inset 0 0 0 var(--border-width) var(--border);
+  cursor: pointer;
+}
+
+.roleOption:has(input:checked) {
+  background: var(--primary-subtle);
+  box-shadow: inset 0 0 0 var(--border-width) var(--primary);
+}
+
+.roleOption:has(input:focus-visible) {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.roleOption input {
+  flex-shrink: 0;
+  width: var(--space-4);
+  height: var(--space-4);
+  margin: 1px 0 0;
+  accent-color: var(--primary);
+}
+
+.roleOption input:focus-visible {
+  outline: none;
+}
+
+.roleText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.roleName {
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  font-weight: var(--weight-medium);
+}
+
+.roleDescription {
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+}
+
+.initialSync {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* ---- mobile: pill tabs and stacked rows ---- */
+
+@media (max-width: 767px) {
+  .tabBar .tabs {
+    display: none;
+  }
+
+  .tabBar {
+    flex-wrap: wrap;
+    align-items: center;
+    border-bottom: 0;
+  }
+
+  .tabAction {
+    padding-bottom: 0;
+  }
+
+  .pills {
+    display: flex;
+    flex: 0 0 auto;
+    max-width: 100%;
+    gap: 6px;
+    overflow-x: auto;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    height: var(--control-md);
+    min-height: var(--touch-min);
+    padding: 0 var(--space-3);
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    box-shadow: inset 0 0 0 var(--border-width) var(--border-strong);
+    color: var(--fg);
+    font: inherit;
+    font-size: var(--text-13);
+    line-height: var(--lh-13);
+    font-weight: var(--weight-medium);
+    white-space: nowrap;
+    cursor: pointer;
+    flex-shrink: 0;
+    justify-content: center;
+    min-width: var(--touch-min);
+  }
+
+  .pill[aria-selected="true"] {
+    background: var(--bg-inverse);
+    box-shadow: none;
+    color: var(--fg-inverse);
+  }
+
+  .head {
+    display: none;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px var(--space-3);
+    margin: 0;
+    padding: 14px var(--space-4);
+  }
+
+  .row {
+    min-height: 0;
+  }
+
+  .entityTitle {
+    font-size: var(--text-15);
+    line-height: var(--lh-15);
+  }
+
+  /* Status (or role) sits beside the name; the last-sync line moves under it. */
+  .syncCell,
+  .lastActiveCell {
+    display: none;
+  }
+
+  .mobileMeta {
+    display: block;
+  }
+
+  .actionCell,
+  .rowActions {
+    grid-column: 1 / -1;
+  }
+
+  .rowActions {
+    justify-content: stretch;
+  }
+
+  .rowActions > * {
+    flex: 1;
+    min-height: var(--touch-min);
+  }
+
+  .actionCell > * {
+    width: 100%;
+    min-height: var(--touch-min);
+  }
+
+  .menuCell {
+    grid-column: 2;
+  }
+
+  .menuCell:empty {
+    display: none;
+  }
+
+  /* Members: name, then role chip and the row menu side by side. */
+  .grid.membersGrid {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+  }
+
+  .membersGrid .menuCell {
+    grid-column: auto;
+  }
+}

@@ -1,0 +1,139 @@
+/* Inverse fill in both themes; tokens only. */
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  max-width: calc(100% - var(--space-8));
+  padding: var(--space-1) var(--space-1) var(--space-1) 14px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-inverse);
+  box-shadow: var(--shadow-popover);
+  color: var(--fg-inverse);
+  font-family: var(--font-sans);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+
+.floating {
+  position: absolute;
+  bottom: var(--bulk-bar-bottom, var(--space-16));
+  left: 50%;
+  z-index: 20;
+  transform: translateX(-50%);
+  animation: rise var(--dur-base) var(--ease);
+}
+
+.inline {
+  display: inline-flex;
+}
+
+.summary {
+  padding-right: var(--space-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  height: 30px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--fg-inverse);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease);
+}
+
+.ghost:hover:not(:disabled),
+.ghost[aria-expanded="true"] {
+  background: color-mix(in srgb, var(--fg-inverse) 12%, transparent);
+}
+
+.primary {
+  background: var(--primary);
+  color: var(--fg-on-accent);
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--fg-inverse);
+  outline-offset: 1px;
+}
+
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.icon {
+  display: inline-flex;
+}
+
+.icon :global(svg) {
+  width: 14px;
+  height: 14px;
+}
+
+.divider {
+  width: var(--border-width);
+  height: 18px;
+  margin: 0 2px;
+  background: color-mix(in srgb, var(--fg-inverse) 20%, transparent);
+}
+
+.clear {
+  justify-content: center;
+  width: 30px;
+  padding: 0;
+  color: var(--fg-inverse-muted);
+}
+
+.clear:hover {
+  background: color-mix(in srgb, var(--fg-inverse) 12%, transparent);
+  color: var(--fg-inverse);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating {
+    animation-name: fade-in;
+  }
+
+  .button {
+    transition: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Narrow screens: actions wrap rather than clip (no overflow, so Popover
+ * menus anchored to an action stay visible). */
+@media (max-width: 767px) {
+  .bar {
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+
+  .button {
+    min-height: var(--touch-min);
+  }
+}

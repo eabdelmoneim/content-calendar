@@ -1,0 +1,38 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--radius-delta);
+  font-family: var(--font-sans);
+  font-size: var(--text-11-5);
+  line-height: var(--lh-delta);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.positive {
+  background: var(--delta-up-bg);
+  color: var(--delta-up-fg);
+  box-shadow: inset 0 0 0 var(--border-width) var(--delta-up-border);
+}
+
+.negative {
+  background: var(--delta-down-bg);
+  color: var(--delta-down-fg);
+  box-shadow: inset 0 0 0 var(--border-width) var(--delta-down-border);
+}
+
+/* Flat change: neutral chip tone (not specced; nearest documented pattern). */
+.neutral {
+  background: var(--chip-neutral-bg);
+  color: var(--chip-neutral-fg);
+  box-shadow: inset 0 0 0 var(--border-width) var(--chip-neutral-border);
+}

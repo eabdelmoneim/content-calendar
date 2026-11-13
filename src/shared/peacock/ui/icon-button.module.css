@@ -1,0 +1,74 @@
+.iconButton {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.iconButton:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.iconButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.sm {
+  width: var(--control-sm);
+  height: var(--control-sm);
+  border-radius: var(--radius-tile);
+}
+
+.md {
+  width: var(--control-md);
+  height: var(--control-md);
+}
+
+.ghost,
+.ghost:focus-visible {
+  background: transparent;
+  box-shadow: none;
+}
+
+.ghost:not(:disabled):hover {
+  background: var(--bg-hover);
+  color: var(--fg);
+}
+
+.secondary,
+.secondary:focus-visible {
+  background: var(--bg);
+  border: var(--border-width) solid var(--border-control);
+  box-shadow: var(--shadow-control);
+}
+
+.secondary:not(:disabled):hover {
+  border-color: var(--border-strong);
+  color: var(--fg);
+}
+
+.glyph {
+  display: inline-flex;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iconButton {
+    transition: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .iconButton {
+    min-width: var(--touch-min);
+    min-height: var(--touch-min);
+  }
+}

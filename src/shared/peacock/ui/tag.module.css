@@ -1,0 +1,95 @@
+.tag {
+  --tag-fg: var(--chip-neutral-fg);
+  --tag-bg: var(--chip-neutral-bg);
+  --tag-border: var(--chip-neutral-border);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-shrink: 0;
+  max-width: 100%;
+  min-width: 0;
+  border-radius: var(--radius-sm);
+  background: var(--tag-bg);
+  box-shadow: inset 0 0 0 var(--border-width) var(--tag-border);
+  color: var(--tag-fg);
+  font-family: var(--font-sans);
+  font-size: var(--text-12);
+  line-height: 1;
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.sm {
+  height: var(--space-5);
+  padding: 0 6px;
+}
+
+.md {
+  height: var(--space-6);
+  padding: 0 var(--space-2);
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.sm .icon :global(svg) {
+  width: 12px;
+  height: 12px;
+}
+
+.md .icon :global(svg) {
+  width: 14px;
+  height: 14px;
+}
+
+.text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.neutral {
+  --tag-fg: var(--chip-neutral-fg);
+  --tag-bg: var(--chip-neutral-bg);
+  --tag-border: var(--chip-neutral-border);
+}
+
+.blue {
+  --tag-fg: var(--chip-blue-fg);
+  --tag-bg: var(--chip-blue-bg);
+  --tag-border: var(--chip-blue-border);
+}
+
+.primary {
+  --tag-fg: var(--chip-primary-fg);
+  --tag-bg: var(--chip-primary-bg);
+  --tag-border: var(--chip-primary-border);
+}
+
+.green {
+  --tag-fg: var(--chip-green-fg);
+  --tag-bg: var(--chip-green-bg);
+  --tag-border: var(--chip-green-border);
+}
+
+.amber {
+  --tag-fg: var(--chip-amber-fg);
+  --tag-bg: var(--chip-amber-bg);
+  --tag-border: var(--chip-amber-border);
+}
+
+.red {
+  --tag-fg: var(--chip-red-fg);
+  --tag-bg: var(--chip-red-bg);
+  --tag-border: var(--chip-red-border);
+}
+
+.violet {
+  --tag-fg: var(--chip-violet-fg);
+  --tag-bg: var(--chip-violet-bg);
+  --tag-border: var(--chip-violet-border);
+}

@@ -1,0 +1,1094 @@
+/* Peacock app shell: COMPONENTS.md › App shell, Sidebar.dc.html, Topbar.dc.html.
+ * Tokens only. */
+
+/* ---------- frame ---------- */
+/* position: relative makes the shell the containing block for absolutely
+ * positioned descendants with no positioned ancestor (the .sr-only/.srOnly
+ * labels in scrolling lists). Without it they resolve against the viewport,
+ * escape every overflow clip, and stretch the document past the shell into
+ * a blank canvas. overflow: clip (hidden as fallback) also stops focus or
+ * find-in-page from scrolling the shell itself. */
+.shell {
+  position: relative;
+  display: flex;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  overflow: clip;
+  background: var(--bg-canvas);
+  color: var(--fg);
+}
+
+.column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Canvas screens: 24px top, 28px sides and bottom (DESIGN.md › Layout). */
+.main {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-6) calc(var(--space-6) + var(--space-1))
+    calc(var(--space-6) + var(--space-1));
+  background: var(--bg-canvas);
+}
+
+.mainPane {
+  padding: 0;
+  background: var(--bg);
+}
+
+/* ---------- sidebar ---------- */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: var(--shell-sidebar-w);
+  height: 100%;
+  border-right: var(--border-width) solid var(--border);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.sidebarCollapsed {
+  width: var(--shell-sidebar-w-collapsed);
+}
+
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  height: var(--topbar-h);
+  padding: 0 var(--space-3) 0 var(--space-2);
+  border-bottom: var(--border-width) solid var(--border);
+  flex-shrink: 0;
+}
+
+.sidebarCollapsed .sidebarHeader {
+  justify-content: center;
+  padding: 0;
+}
+
+.collapseButton {
+  flex-shrink: 0;
+}
+
+/* workspace selector */
+.workspaceRoot {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.sidebarCollapsed .workspaceRoot {
+  flex: 0 0 auto;
+}
+
+.workspaceButton {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  height: var(--control-lg);
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--radius-item);
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease);
+}
+
+.sidebarCollapsed .workspaceButton {
+  justify-content: center;
+  padding: 0 var(--space-1);
+}
+
+.workspaceButton:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+
+.workspaceButton:disabled {
+  cursor: default;
+}
+
+.mark {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: var(--control-md);
+  height: var(--control-md);
+  border-radius: var(--radius-md);
+  background: var(--primary);
+  color: var(--fg-on-accent);
+  font-size: var(--text-14);
+  line-height: 1;
+  font-weight: var(--weight-semibold);
+}
+
+.markSm {
+  width: var(--space-6);
+  height: var(--space-6);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-11);
+}
+
+.markLaunchPoint {
+  background: url("/brands/launchpoint.png") center / cover no-repeat;
+}
+
+.markNebula {
+  background: var(--ink) url("/brands/nebula.png") center / 78% auto no-repeat;
+}
+
+.workspaceCopy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.workspaceMeta {
+  color: var(--fg-subtle);
+  font-size: var(--text-11);
+  line-height: var(--lh-11);
+}
+
+.workspaceName {
+  overflow: hidden;
+  font-size: var(--text-13);
+  line-height: var(--lh-12);
+  font-weight: var(--weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workspaceChevron {
+  flex-shrink: 0;
+  color: var(--fg-subtle);
+}
+
+.workspaceList {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 40;
+  width: max(100%, 232px);
+  max-height: 320px;
+  margin: 0;
+  padding: 6px;
+  overflow-y: auto;
+  list-style: none;
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-popover);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+}
+
+.workspaceList:focus-visible {
+  outline: none;
+}
+
+.workspaceOption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--control-md);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.workspaceOptionActive {
+  background: var(--bg-muted);
+}
+
+.workspaceList:focus-visible .workspaceOptionActive {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.workspaceOption[aria-selected="true"] {
+  font-weight: var(--weight-medium);
+}
+
+.workspaceOptionName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* nav */
+.navScroll {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.navGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-3);
+}
+
+.navGroup + .navGroup {
+  border-top: var(--border-width) solid var(--border);
+}
+
+.navGroupLabel {
+  padding: 0 var(--space-2) 6px;
+  color: var(--fg-subtle);
+  font-size: var(--text-11);
+  line-height: var(--lh-11);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: var(--touch-min);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-item);
+  color: var(--fg-muted);
+  font-size: var(--text-15);
+  line-height: var(--lh-15);
+  font-weight: var(--weight-regular);
+  text-decoration: none;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.sidebarCollapsed .navItem {
+  justify-content: center;
+  padding: 0;
+}
+
+.navItem:hover {
+  background: var(--bg-hover);
+  color: var(--fg);
+}
+
+.navItem:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.navIcon {
+  flex-shrink: 0;
+  color: var(--fg-subtle);
+}
+
+.navItemActive {
+  background: var(--bg-hover);
+  color: var(--fg);
+  font-weight: var(--weight-medium);
+}
+
+.navItemActive .navIcon,
+.navItem:hover .navIcon {
+  color: var(--fg);
+}
+
+.navLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.newBadge {
+  height: var(--lh-badge);
+  padding: 0 7px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-subtle);
+  box-shadow: inset 0 0 0 var(--border-width) var(--chip-primary-border);
+  color: var(--primary-fg);
+  font-size: var(--text-10);
+  line-height: var(--lh-badge);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-badge);
+  text-transform: uppercase;
+}
+
+/* footer */
+.sidebarFooter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  flex-shrink: 0;
+}
+
+.sidebarFooterCollapsed {
+  align-items: center;
+  padding: var(--space-3) 0;
+}
+
+/* Collapsed rail: the expand button sits in a row under the header. */
+.railToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--touch-min);
+  margin-top: var(--space-2);
+  flex-shrink: 0;
+}
+
+/* 28px visual, 44px hit area. */
+.railExpand {
+  position: relative;
+}
+
+.railExpand::after {
+  content: "";
+  position: absolute;
+  inset: calc((var(--touch-min) - var(--control-sm)) / -2);
+}
+
+.footerCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: var(--space-3);
+  border-radius: var(--radius-item);
+  background: var(--bg);
+  box-shadow: inset 0 0 0 var(--border-width) var(--border);
+}
+
+.footerHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.footerTitle {
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+
+.footerManage {
+  color: var(--primary);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+}
+
+.footerManage:hover {
+  color: var(--primary-hover);
+}
+
+.footerRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+}
+
+.linkedInGlyph {
+  flex-shrink: 0;
+  color: var(--fg-muted);
+}
+
+.footerRowName {
+  flex: 1;
+  min-width: 0;
+}
+
+.footerRowCount {
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.footerWarning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--warning);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+}
+
+.footerWarning:hover {
+  text-decoration: underline;
+}
+
+.footerWarningIcon {
+  display: grid;
+  place-items: center;
+  width: var(--control-md);
+  height: var(--control-md);
+  border-radius: var(--radius-md);
+  color: var(--warning);
+}
+
+.footerWarningIcon:hover {
+  background: var(--bg-hover);
+}
+
+/* ---------- topbar ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: var(--topbar-h);
+  padding: 0 var(--space-6);
+  border-bottom: var(--border-width) solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+}
+
+.topbar .menuButton {
+  display: none;
+}
+
+/* ---------- account menu (sidebar footer, last item) ---------- */
+.accountMenu {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* The Popover anchor: full width in the expanded footer. */
+.accountMenu > :first-child {
+  display: flex;
+  width: 100%;
+}
+
+.accountMenuCollapsed {
+  align-items: center;
+}
+
+.accountMenuCollapsed > :first-child {
+  width: auto;
+}
+
+.accountButton {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  height: var(--touch-min);
+  padding: 0 var(--space-2) 0 6px;
+  border: 0;
+  border-radius: var(--radius-item);
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease);
+}
+
+.accountMenuCollapsed .accountButton {
+  flex: 0 0 auto;
+  justify-content: center;
+  width: var(--touch-min);
+  padding: 0;
+}
+
+.accountButton:hover,
+.accountButton[aria-expanded="true"] {
+  background: var(--bg-hover);
+}
+
+.accountButton:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.accountCopy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.accountName {
+  overflow: hidden;
+  font-size: var(--text-13);
+  line-height: var(--lh-12);
+  font-weight: var(--weight-medium);
+  text-overflow: ellipsis;
+}
+
+.accountRole {
+  overflow: hidden;
+  color: var(--fg-subtle);
+  font-size: var(--text-11);
+  line-height: var(--lh-11);
+  text-overflow: ellipsis;
+}
+
+.accountChevron {
+  flex-shrink: 0;
+  color: var(--fg-subtle);
+}
+
+/* Opens upward from the footer so the viewport bottom never clips it. */
+.accountMenu .accountPanel {
+  top: auto;
+  right: auto;
+  bottom: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  min-width: 220px;
+}
+
+/* From the 72px rail it opens sideways, bottom-aligned with the avatar. */
+.accountMenuCollapsed .accountPanel {
+  bottom: 0;
+  left: calc(100% + var(--space-4));
+  width: auto;
+}
+
+.menuSeparator {
+  height: var(--border-width);
+  margin: 6px calc(6px * -1);
+  background: var(--border);
+}
+
+.menuLabel {
+  padding: var(--space-1) var(--space-2);
+  color: var(--fg-subtle);
+  font-size: var(--text-11);
+  line-height: var(--lh-11);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.menuRadio {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  height: var(--control-md);
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menuRadio:hover,
+.menuRadio:focus-visible {
+  background: var(--bg-muted);
+}
+
+.menuRadio:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+  box-shadow: none;
+}
+
+.menuRadioIcon {
+  color: var(--fg-muted);
+}
+
+.menuRadioLabel {
+  flex: 1;
+}
+
+.signOutError {
+  margin: 0;
+  padding: 0 var(--space-2);
+  color: var(--danger);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+}
+
+.accountMenuCollapsed .signOutError {
+  position: absolute;
+  bottom: 0;
+  left: calc(100% + var(--space-4));
+  z-index: 40;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-popover);
+  white-space: nowrap;
+}
+
+/* ---------- account selector (top bar) ---------- */
+.selectorRoot {
+  display: flex;
+  min-width: 0;
+  margin-left: calc(var(--space-2) * -1);
+  flex-shrink: 1;
+}
+
+.selectorRoot > :first-child {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.selectorButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  max-width: 320px;
+  height: var(--control-lg);
+  padding: 0 var(--space-2) 0 var(--space-1);
+  border: 0;
+  border-radius: var(--radius-item);
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease);
+}
+
+.selectorButton:hover,
+.selectorButton[aria-expanded="true"] {
+  background: var(--bg-hover);
+}
+
+.selectorButton:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.selectorAvatars {
+  flex-shrink: 0;
+}
+
+.selectorEmptyIcon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--space-6);
+  height: var(--space-6);
+  border-radius: var(--radius-full);
+  background: var(--bg-muted);
+  color: var(--fg-subtle);
+}
+
+.selectorLabel {
+  overflow: hidden;
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  font-weight: var(--weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.selectorChevron {
+  flex-shrink: 0;
+  color: var(--fg-subtle);
+}
+
+.selectorRoot .selectorPanel {
+  width: 336px;
+}
+
+.selectorHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 6px var(--space-2) var(--space-2);
+}
+
+.selectorHeadCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.selectorTitle {
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  font-weight: var(--weight-semibold);
+}
+
+.selectorHint {
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+}
+
+.selectorSelectAll {
+  flex-shrink: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+  font: inherit;
+  font-size: var(--text-12);
+  line-height: var(--lh-13);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.selectorSelectAll:hover:not(:disabled) {
+  color: var(--primary-hover);
+}
+
+.selectorSelectAll:disabled {
+  color: var(--fg-placeholder);
+  cursor: default;
+}
+
+.selectorSelectAll:focus-visible {
+  border-radius: var(--radius-sm);
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.selectorList {
+  display: flex;
+  flex-direction: column;
+  max-height: min(360px, 60vh);
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+/* Checkbox root: avatar, name and status first, the box at the end. */
+.selectorRow {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--control-lg);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+}
+
+.selectorRow > :last-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.selectorRow:hover,
+.selectorRow:focus-within {
+  background: var(--bg-muted);
+}
+
+/* Keep the reason readable: dim the person, not the explanation. */
+.selectorList .selectorRowDisabled {
+  opacity: 1;
+}
+
+.selectorList .selectorRowDisabled:hover {
+  background: transparent;
+}
+
+.selectorRowDisabled input,
+.selectorRowDisabled .selectorRowName,
+.selectorRowDisabled .selectorStatus {
+  opacity: 0.5;
+}
+
+.selectorRowBody {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.selectorRowCopy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.selectorRowName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.selectorRowReason {
+  color: var(--fg-subtle);
+  font-size: var(--text-11);
+  line-height: var(--lh-11);
+}
+
+.selectorStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.selectorStatusIcon {
+  display: inline-grid;
+  place-items: center;
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+.selectorGlyph {
+  display: block;
+}
+
+.statusOk {
+  color: var(--fg);
+}
+
+.statusWarn {
+  color: var(--warning);
+}
+
+.statusOff {
+  color: var(--fg-placeholder);
+}
+
+.selectorNotice {
+  margin: 0;
+  padding: var(--space-2) var(--space-2) var(--space-1);
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+}
+
+.selectorNotice:empty {
+  padding: 0;
+}
+
+.selectorNoticeActive {
+  color: var(--warning);
+}
+
+.selectorEmpty {
+  margin: 0;
+  padding: var(--space-3) var(--space-2);
+  color: var(--fg-subtle);
+}
+
+.topbarDivider {
+  width: var(--border-width);
+  height: var(--space-6);
+  margin: 0 6px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.titleRow {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  font-size: var(--text-14);
+  line-height: var(--lh-14);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+
+.breadcrumb {
+  color: var(--fg-subtle);
+  text-decoration: none;
+}
+
+.breadcrumb:hover {
+  color: var(--fg);
+}
+
+.breadcrumbChevron {
+  color: var(--fg-placeholder);
+  flex-shrink: 0;
+}
+
+.title {
+  overflow: hidden;
+  font-size: var(--text-15);
+  line-height: var(--lh-15);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  text-overflow: ellipsis;
+}
+
+/* ---------- mobile (<768px): drawer + 56px header ---------- */
+.drawerOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 59;
+  padding: 0;
+  border: 0;
+  background: var(--overlay);
+  cursor: default;
+}
+
+@media (max-width: 767px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 60;
+    width: min(var(--shell-sidebar-w), calc(100vw - var(--space-12)));
+    box-shadow: var(--shadow-dialog);
+    visibility: hidden;
+    transform: translateX(-100%);
+    transition:
+      transform var(--dur-slow) var(--ease),
+      visibility var(--dur-slow) var(--ease);
+  }
+
+  .sidebarDrawerOpen {
+    visibility: visible;
+    transform: none;
+  }
+
+  /* The drawer never collapses; this also covers the first server paint. */
+  .sidebarHeader .collapseButton {
+    display: none;
+  }
+
+  .topbar {
+    padding: 0 var(--space-4) 0 var(--space-2);
+  }
+
+  .main {
+    padding: var(--space-4);
+  }
+
+  .mainPane {
+    padding: 0;
+  }
+
+  .topbar .menuButton {
+    display: inline-grid;
+    width: var(--touch-min);
+    height: var(--touch-min);
+    flex-shrink: 0;
+  }
+
+  .railToggle {
+    display: none;
+  }
+
+  .selectorRoot {
+    margin-left: 0;
+  }
+
+  .selectorButton {
+    height: var(--touch-min);
+  }
+
+  /* The avatars say who; the label returns in the panel and its name. */
+  .selectorLabel {
+    display: none;
+  }
+
+  /* Full-width sheet under the 56px header: never off-screen. */
+  .selectorRoot .selectorPanel {
+    position: fixed;
+    top: calc(var(--topbar-h) + var(--space-1));
+    right: var(--space-4);
+    left: var(--space-4);
+    width: auto;
+    max-width: none;
+  }
+
+  .selectorRow {
+    min-height: var(--touch-min);
+  }
+
+  .selectorSelectAll {
+    min-height: var(--touch-min);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar {
+    transition: none;
+  }
+}
+
+/* A row's checkbox plus its "Only" shortcut. */
+.selectorItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.selectorItem > :first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.selectorOnly {
+  position: absolute;
+  right: 84px;
+  padding: 2px 8px;
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-full);
+  background: var(--bg);
+  color: var(--fg-muted);
+  font: inherit;
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  opacity: 0;
+}
+
+.selectorItem:hover .selectorOnly,
+.selectorItem:focus-within .selectorOnly,
+.selectorOnly:focus-visible {
+  opacity: 1;
+}
+
+.selectorOnly:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.selectorOnly[aria-pressed="true"] {
+  border-color: var(--primary);
+  color: var(--primary);
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .selectorOnly {
+    opacity: 1;
+  }
+}

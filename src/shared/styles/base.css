@@ -1,0 +1,65 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+/* --font-sans in tokens.css names 'Inter', but next/font serves Inter under a
+ * generated family name exposed as --font-inter (set on <html> in the root
+ * layout). Same stack as tokens.css, with the loaded Inter slotted in so SF Pro
+ * still wins on Apple devices. Tailwind preflight reads --font-sans and
+ * --font-mono through --default-(mono-)font-family, so html, code, pre, kbd
+ * and samp pick these up too. */
+:root {
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    var(--font-inter, "Inter"), "Inter", system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-canvas);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--text-14);
+  line-height: var(--lh-14);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--primary-subtle);
+  color: var(--primary-fg);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

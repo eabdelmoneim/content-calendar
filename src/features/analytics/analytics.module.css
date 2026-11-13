@@ -1,0 +1,643 @@
+/* Analytics accounts overview (SCREENS.md §4). Tokens only. The shell's
+ * <main> already supplies the canvas and 24/28/28 page padding. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  color: var(--fg);
+  font-family: var(--font-sans);
+}
+
+/* ---- toolbar ---- */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.spacer {
+  flex: 1;
+}
+
+.dateButton,
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--control-md);
+  border: var(--border-width) solid var(--border-control);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  box-shadow: var(--shadow-control);
+  color: var(--fg);
+  font-family: inherit;
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+
+.chip:not(:disabled):hover {
+  border-color: var(--border-strong);
+}
+
+.chip:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.dateButton:focus-visible,
+.chip:focus-visible,
+.presetOption:focus-visible,
+.primaryLink:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--fg-subtle);
+}
+
+/* Joined group: custom range | preset menu. */
+.dateGroup {
+  display: inline-flex;
+  border: var(--border-width) solid var(--border-control);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  box-shadow: var(--shadow-control);
+}
+
+.dateGroup .dateButton {
+  height: calc(var(--control-md) - 2px);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.dateGroup > :first-child .dateButton {
+  padding: 0 10px;
+  border-right: var(--border-width) solid var(--border-control);
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.dateGroup > :last-child .dateButton {
+  gap: 6px;
+  padding: 0 var(--space-2) 0 10px;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.dateGroup .dateButton:hover {
+  background: var(--bg-hover);
+}
+
+.dateRangeButton {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- popover panels ---- */
+
+.datePanel {
+  width: 280px;
+}
+
+.dateForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 6px;
+}
+
+.panelHint {
+  margin: 0;
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+}
+
+.dateActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.presetList {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 6px;
+  border-bottom: var(--border-width) solid var(--border-row);
+}
+
+.presetOption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--touch-min);
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.presetOption:hover {
+  background: var(--bg-muted);
+}
+
+.linkedInMark {
+  flex-shrink: 0;
+  color: var(--brand-linkedin);
+}
+
+/* ---- KPI + chart rows ---- */
+
+.kpis {
+  display: grid;
+  /* Five KPIs here (Peacock has four): posts, impressions, engagements,
+   * engagement rate, followers. */
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.chartRow,
+.thirdRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: stretch;
+}
+
+.thirdRow {
+  align-items: start;
+}
+
+.headline {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-30);
+  line-height: var(--lh-30);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-tighter);
+  font-variant-numeric: tabular-nums;
+}
+
+.comparison {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+  font-variant-numeric: tabular-nums;
+}
+
+.plot {
+  margin-top: 18px;
+}
+
+.plotEmpty {
+  display: grid;
+  place-items: center;
+  min-height: 236px;
+  margin: 0;
+  color: var(--fg-subtle);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  text-align: center;
+  text-wrap: pretty;
+}
+
+.distribution {
+  gap: var(--space-5);
+  padding-bottom: var(--space-5);
+}
+
+.donut {
+  flex: 1;
+}
+
+.followers {
+  padding: var(--space-4) var(--space-5) var(--space-2);
+}
+
+.stack {
+  margin: 18px 0 10px;
+}
+
+/* ---- states ---- */
+
+.audienceSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.audienceRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.audienceHint,
+.audienceEmpty {
+  margin: var(--space-2) 0;
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  line-height: var(--lh-14);
+}
+
+.audienceEmpty {
+  padding: var(--space-8) 0;
+}
+
+.engagerList,
+.companyList {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-3) 0 0;
+}
+
+.engagerRow {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  min-height: 60px;
+}
+
+.engagerIdentity {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.engagerName,
+.companyName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-14);
+  line-height: var(--lh-14);
+  font-weight: var(--weight-medium);
+}
+
+.engagerHeadline {
+  color: var(--fg-subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+}
+
+.engagerCounts {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+  font-variant-numeric: tabular-nums;
+}
+
+.engagerCounts strong,
+.companyPeople {
+  color: var(--fg);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-14);
+}
+
+.companyRow {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 42px;
+  margin-bottom: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.companyBar {
+  position: absolute;
+  z-index: -1;
+  inset: 0 auto 0 0;
+  background: var(--bg-muted);
+  border-radius: var(--radius-md);
+}
+
+.companyInteractions,
+.peopleLabel {
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  font-weight: var(--weight-regular);
+}
+
+.emptyCard {
+  padding: 80px var(--space-6);
+}
+
+.primaryLink {
+  display: inline-flex;
+  align-items: center;
+  height: var(--control-md);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--primary);
+  color: var(--fg-on-accent);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--dur-fast) var(--ease);
+}
+
+.primaryLink:hover {
+  background: var(--primary-hover);
+  color: var(--fg-on-accent);
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.skeletonBars {
+  flex-direction: row;
+  align-items: flex-end;
+  gap: var(--space-2);
+  height: 340px;
+  padding: var(--space-5);
+}
+
+.skeletonBar {
+  flex: 1;
+}
+
+.footnote {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+  text-wrap: pretty;
+}
+
+.footnoteIcon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ---- mobile (SCREENS.md › Analytics › Mobile) ---- */
+
+/* SCREENS.md › Analytics › Mobile: the chips wrap onto a second line
+ * rather than scrolling sideways inside their row. */
+.mobileChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.chip {
+  gap: 6px;
+  height: 36px;
+  min-height: var(--touch-min);
+  padding: 0 var(--space-3);
+  border-radius: 9px;
+}
+
+.mobileTop {
+  padding: 14px 14px var(--space-1);
+}
+
+.mobileTopList {
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mobileTopRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  border-top: var(--border-width) solid var(--border-row);
+}
+
+.mobileTopText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.mobileTopTitle {
+  overflow: hidden;
+  font-size: var(--text-14);
+  line-height: var(--lh-14);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mobileTopSub {
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+  font-variant-numeric: tabular-nums;
+}
+
+.mobileTopValue {
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 1199px) {
+  .chartRow,
+  .thirdRow,
+  .audienceRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 1279px) {
+  .kpis {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1023px) {
+  .kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .companyRow {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-1) var(--space-2);
+  }
+
+  .companyInteractions {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .companyPeople {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+
+  .engagerCounts {
+    max-width: 115px;
+  }
+  .page {
+    gap: var(--space-3);
+  }
+
+  .kpis {
+    gap: 10px;
+  }
+
+  .emptyCard {
+    padding: var(--space-12) var(--space-4);
+  }
+
+  .primaryLink {
+    height: var(--touch-min);
+  }
+
+  .skeletonBars {
+    height: 220px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dateButton,
+  .chip,
+  .primaryLink {
+    transition: none;
+  }
+}
+
+.nativePostLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.nativePostLink svg {
+  flex-shrink: 0;
+  color: var(--fg-subtle);
+}
+
+.nativePostLink:hover,
+.nativePostLink:focus-visible {
+  text-decoration: underline;
+}
+
+.nativePostLink:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.nativePostTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- content-calendar additions: manual numbers ---- */
+
+.entryForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.entryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-3);
+}
+
+.accountPlatform {
+  color: var(--fg-subtle);
+  font-weight: var(--weight-regular);
+}
+
+.noNumbers {
+  color: var(--warning);
+  font-weight: var(--weight-medium);
+}
+
+.inlineLink {
+  margin-top: var(--space-2);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--primary);
+  font: inherit;
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+}
+
+.inlineLink:hover {
+  text-decoration: underline;
+}
+
+.inlineLink:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.moreRow {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-2);
+  border-top: var(--border-width) solid var(--border-row);
+}
+
+.mobileSort {
+  margin-top: var(--space-2);
+  overflow-x: auto;
+}
+
+.sideStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+@media (max-width: 1023px) {
+  /* Odd KPI count: the last card spans the row instead of leaving a hole. */
+  .kpis > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}

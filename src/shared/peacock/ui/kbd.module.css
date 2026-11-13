@@ -1,0 +1,20 @@
+.group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.key {
+  display: inline-grid;
+  place-items: center;
+  min-width: var(--space-5);
+  height: var(--space-5);
+  padding: 0 6px;
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 0 var(--border-width) var(--border);
+  color: var(--fg-subtle);
+  font-family: var(--font-sans);
+  font-size: var(--text-11);
+  line-height: var(--lh-12);
+  font-weight: var(--weight-medium);
+}

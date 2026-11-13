@@ -1,0 +1,128 @@
+.root {
+  --bar-gap: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+
+.weekly {
+  --bar-gap: var(--space-6);
+}
+
+/* No gridlines and no axes (DESIGN.md › Bar charts). */
+.plot {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--bar-gap);
+  height: 236px;
+}
+
+.column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  height: 100%;
+  border-radius: var(--radius-sm);
+  cursor: default;
+}
+
+.column:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.bar {
+  display: block;
+  width: 100%;
+  border-radius: var(--radius-sm);
+  background: var(--chart-rest);
+  transition: background var(--dur-fast) var(--ease);
+}
+
+.focused .bar {
+  background: var(--chart-focus);
+}
+
+.value {
+  color: var(--fg);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.axis {
+  display: flex;
+  gap: var(--bar-gap);
+}
+
+.tick {
+  flex: 1;
+  min-width: 0;
+  overflow: visible;
+  color: var(--fg-subtle);
+  font-size: var(--text-11-5);
+  line-height: var(--lh-11-5);
+  font-weight: var(--weight-regular);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.value.edgeStart {
+  align-self: flex-start;
+}
+
+.value.edgeEnd {
+  align-self: flex-end;
+}
+
+/* Flex alignment (not text-align) so an over-wide edge label overflows inward. */
+.tick.edgeStart,
+.tick.edgeEnd {
+  display: flex;
+}
+
+.tick.edgeEnd {
+  justify-content: flex-end;
+}
+
+.tickOn {
+  color: var(--fg);
+  font-weight: var(--weight-semibold);
+}
+
+@media (max-width: 767px) {
+  .plot {
+    height: 150px;
+  }
+
+  .weekly {
+    --bar-gap: 14px;
+  }
+
+  .weekPrefix {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    transition: none;
+  }
+}
+
+/* Missing observations remain visibly distinct from a measured zero. */
+.bar.missing,
+.focused .bar.missing {
+  background: transparent;
+  border: 1px dashed var(--border-strong);
+}

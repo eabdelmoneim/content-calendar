@@ -1,0 +1,4 @@
+@import "tailwindcss";
+/* Peacock design tokens, verbatim from design_handoff_peacock_frontend/tokens.css. */
+@import "../shared/styles/tokens.css";
+@import "../shared/styles/base.css";

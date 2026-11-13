@@ -1,0 +1,62 @@
+.list {
+  display: flex;
+  gap: 22px;
+  border-bottom: var(--border-width) solid var(--border);
+  font-family: var(--font-sans);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 0 10px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--fg-subtle);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--dur-base) var(--ease);
+}
+
+.tab:not(:disabled):hover {
+  color: var(--fg);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.tab:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Underline painted as a background strip: an inset box-shadow leaves a
+ * hairline on the right edge when the tab sits on a fractional pixel. */
+.selected,
+.selected:focus-visible {
+  color: var(--fg);
+  background: linear-gradient(var(--fg), var(--fg)) bottom / 100% 2px
+    no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab {
+    transition: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .tab {
+    min-height: var(--touch-min);
+    padding-top: 0;
+    align-items: center;
+  }
+}

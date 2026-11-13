@@ -1,0 +1,200 @@
+/* COMPONENTS.md › PostCard */
+.card {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  padding: 5px 7px;
+  border-radius: var(--radius-md);
+  background: var(--bg-raised);
+  box-shadow: 0 0 0 1px var(--border);
+  color: var(--fg);
+  cursor: grab;
+  outline: none;
+  text-align: left;
+  transition: box-shadow var(--dur-fast) var(--ease);
+}
+
+.card:hover {
+  box-shadow:
+    0 0 0 1px var(--border-strong),
+    var(--shadow-control);
+}
+
+.card:focus-visible {
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+.card[data-picked] {
+  box-shadow:
+    0 0 0 2px var(--primary),
+    var(--shadow-popover);
+}
+
+.card[data-status="needs_review"] {
+  background: var(--card-review-bg);
+  box-shadow: 0 0 0 1px var(--card-review-ring);
+}
+
+.card[data-status="failed"] {
+  background: var(--card-failed-bg);
+  box-shadow: 0 0 0 1px var(--card-failed-ring);
+}
+
+.card[data-status="published"] {
+  background: var(--bg-subtle);
+}
+
+.card[data-status="needs_review"]:hover,
+.card[data-status="failed"]:hover,
+.card[data-status="published"]:hover {
+  box-shadow:
+    0 0 0 1px var(--border-strong),
+    var(--shadow-control);
+}
+
+.card[data-status="needs_review"]:focus-visible,
+.card[data-status="failed"]:focus-visible,
+.card[data-status="published"]:focus-visible {
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+.full {
+  padding: var(--space-2) 9px;
+}
+
+.week {
+  position: absolute;
+  left: var(--space-1);
+  right: var(--space-1);
+  height: 72px;
+  gap: var(--space-1);
+  padding: 6px var(--space-2);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  color: var(--fg-subtle);
+  font-size: var(--text-11);
+  line-height: var(--lh-11);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+.time {
+  white-space: nowrap;
+}
+
+.who {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.statusIcon {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.neutral { color: var(--chip-neutral-fg); }
+.blue { color: var(--chip-blue-fg); }
+.primary { color: var(--chip-primary-fg); }
+.green { color: var(--chip-green-fg); }
+.amber { color: var(--chip-amber-fg); }
+.red { color: var(--chip-red-fg); }
+.violet { color: var(--chip-violet-fg); }
+.review { color: var(--chip-review-fg); }
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background: var(--fg-placeholder);
+}
+
+.dot[data-color="neutral"] { background: var(--label-neutral-dot); }
+.dot[data-color="blue"] { background: var(--label-blue-dot); }
+.dot[data-color="teal"] { background: var(--label-teal-dot); }
+.dot[data-color="green"] { background: var(--label-green-dot); }
+.dot[data-color="amber"] { background: var(--label-amber-dot); }
+.dot[data-color="red"] { background: var(--label-red-dot); }
+.dot[data-color="violet"] { background: var(--label-violet-dot); }
+.dot[data-color="pink"] { background: var(--label-pink-dot); }
+
+.title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+  font-weight: var(--weight-medium);
+}
+
+.card[data-status="published"] .title {
+  color: var(--fg-muted);
+}
+
+.attention {
+  color: var(--chip-amber-fg);
+  font-size: var(--text-11);
+  line-height: var(--lh-11);
+  font-weight: var(--weight-medium);
+}
+
+.attentionDanger {
+  color: var(--chip-red-fg);
+}
+
+.chipRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  margin-top: 2px;
+}
+
+.labelName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg-subtle);
+  font-size: var(--text-11);
+  line-height: var(--lh-11);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+}
+
+/* Content Calendar: a platform stripe so LinkedIn and X read apart at a glance. */
+.card[data-platform="linkedin"] {
+  border-left: 3px solid var(--brand-linkedin);
+}
+
+.card[data-platform="x"] {
+  border-left: 3px solid var(--fg);
+}

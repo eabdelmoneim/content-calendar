@@ -1,0 +1,291 @@
+.table {
+  min-width: 0;
+  color: var(--fg);
+  font-family: var(--font-sans);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: var(--dt-columns);
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 var(--space-3);
+  padding: 0 var(--space-3);
+}
+
+/* Own scroll viewport (maxHeight). */
+.scroll {
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.scroll:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+/* Wide tables: rowgroups hold the min width (plus the 12px row insets) so
+ * every row is the same width and the container scrolls sideways. */
+.wide .headGroup,
+.wide .bodyGroup {
+  min-width: calc(var(--dt-min-width) + 2 * var(--space-3));
+}
+
+/* Without a sticky header the table can scroll sideways by itself. With a
+ * sticky header, pass maxHeight or wrap it in your own overflow container,
+ * otherwise the header would stick to the table rather than the page. */
+.wide:not(.stickyHeader):not(.scroll) {
+  overflow-x: auto;
+}
+
+.stickyHeader .headGroup {
+  position: sticky;
+  top: var(--dt-sticky-top, 0);
+  z-index: 3;
+  /* Covers rows sliding under the inset header. */
+  background: var(--dt-surface, var(--bg));
+}
+
+.header {
+  --dt-row-bg: var(--bg-canvas);
+  height: 34px;
+  border-radius: var(--radius-md);
+  background: var(--bg-canvas);
+  color: var(--fg-subtle);
+  font-size: var(--text-11);
+  line-height: var(--lh-11);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.headCell {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.row {
+  --dt-row-bg: var(--dt-surface, var(--bg));
+  height: 54px;
+  border-bottom: var(--border-width) solid var(--border-row);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  font-variant-numeric: tabular-nums;
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.compact {
+  height: 50px;
+}
+
+.clickable {
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: background var(--dur-fast) var(--ease);
+}
+
+.clickable:hover {
+  --dt-row-bg: var(--bg-subtle);
+  background: var(--bg-subtle);
+}
+
+.clickable:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+/* The row whose drawer is open. */
+.active,
+.active:hover {
+  --dt-row-bg: var(--bg-muted);
+  background: var(--bg-muted);
+}
+
+.selected,
+.selected:hover {
+  --dt-row-bg: var(--primary-subtle);
+  background: var(--primary-subtle);
+}
+
+/* Sticky first column. Offsets are the natural positions minus the 24px
+ * row inset, so the cells keep their spacing once they stick. */
+.sticky {
+  position: sticky;
+  z-index: 1;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  background: var(--dt-row-bg);
+}
+
+/* Fill the grid gaps either side so scrolled cells don't show through. */
+.sticky::before {
+  content: "";
+  position: absolute;
+  inset: 0 calc(-1 * var(--space-3));
+  z-index: -1;
+  background: var(--dt-row-bg);
+}
+
+.header .stickyFirst::before {
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.stickyFirst {
+  left: 0;
+}
+
+.stickyAfterCheck {
+  left: calc(40px + var(--space-3));
+}
+
+.numeric.sticky {
+  justify-content: flex-end;
+}
+
+.sortButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  max-width: 100%;
+  margin: 0 -4px;
+  padding: 2px var(--space-1);
+  border: 0;
+  border-radius: var(--space-1);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.sortNumeric {
+  flex-direction: row-reverse;
+}
+
+.sortButton:hover,
+.sortActive {
+  color: var(--fg);
+}
+
+.sortButton:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 0;
+}
+
+.sortIcon {
+  flex-shrink: 0;
+  color: var(--fg-placeholder);
+}
+
+.sortActive .sortIcon,
+.sortButton:hover .sortIcon {
+  color: var(--fg);
+}
+
+.banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: var(--border-width) solid var(--chip-primary-border);
+  background: var(--primary-subtle);
+  color: var(--primary-fg);
+  font-family: var(--font-sans);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  text-align: center;
+}
+
+.bannerAction {
+  padding: 0 2px;
+  border: 0;
+  border-radius: var(--space-1);
+  background: transparent;
+  color: var(--primary-fg);
+  font: inherit;
+  font-weight: var(--weight-semibold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.bannerAction:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+.cell {
+  min-width: 0;
+}
+
+.numeric {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  justify-self: stretch;
+}
+
+.checkCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emptyRow {
+  margin: 0 var(--space-3);
+  padding: var(--space-6) var(--space-3);
+}
+
+.emptyCell {
+  display: block;
+  color: var(--fg-subtle);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  text-align: center;
+}
+
+.entity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.entityText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.entityTitle {
+  overflow: hidden;
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.entitySub {
+  overflow: hidden;
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clickable,
+  .sortButton {
+    transition: none;
+  }
+}

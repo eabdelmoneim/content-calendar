@@ -1,0 +1,25 @@
+.c1 {
+  --series: var(--chart-1);
+}
+
+.c2 {
+  --series: var(--chart-2);
+}
+
+.c3 {
+  --series: var(--chart-3);
+}
+
+.c4 {
+  --series: var(--chart-4);
+}
+
+/* Remainder segment: legends and swatches use the hatch line colour. */
+.hatch {
+  --series: var(--chart-hatch);
+}
+
+/* Inactive entity (e.g. a disconnected account) in a legend or stacked bar. */
+.muted {
+  --series: var(--border-strong);
+}

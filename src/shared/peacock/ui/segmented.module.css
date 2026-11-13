@@ -1,0 +1,96 @@
+.track {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 9px;
+  background: var(--bg-muted);
+  font-family: var(--font-sans);
+}
+
+.compact {
+  padding: 2px;
+  border-radius: var(--radius-md);
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: var(--control-sm);
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-tile);
+  background: transparent;
+  box-shadow: none;
+  color: var(--fg-muted);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.compact .item {
+  height: 26px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+}
+
+.item:not(.selected):not(:disabled):hover {
+  color: var(--fg);
+}
+
+.item:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.item:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.selected,
+.selected:focus-visible {
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-segment);
+  color: var(--fg);
+}
+
+.item :global(svg) {
+  flex-shrink: 0;
+}
+
+.icon {
+  display: inline-flex;
+}
+
+.block {
+  display: flex;
+  width: 100%;
+}
+
+.block .item {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    transition: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .item,
+  .compact .item {
+    min-height: var(--touch-min);
+  }
+}

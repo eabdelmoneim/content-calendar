@@ -1,0 +1,256 @@
+/* Peacock design tokens — import once in app/layout.tsx. Theme via <html data-theme="light|dark">. */
+:root {
+  /* type */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', system-ui, sans-serif; /* SF Pro on Apple, Inter elsewhere */
+  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, monospace;
+  --text-28: 28px; --lh-28: 34px; /* metrics, weight 500 */
+  --text-12: 12px; --lh-12: 16px;
+  --text-13: 13px; --lh-13: 18px;
+  --text-14: 14px; --lh-14: 20px;
+  --text-16: 16px; --lh-16: 24px;
+  --text-20: 20px; --lh-20: 28px;
+  --text-24: 24px; --lh-24: 32px;
+  --text-32: 32px; --lh-32: 40px;
+  --weight-regular: 400; --weight-medium: 500; --weight-semibold: 600;
+  --tracking-tight: -0.01em; --tracking-tighter: -0.02em; --tracking-caps: 0.06em;
+
+  /* space (4px grid) */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px;
+  --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px; --space-16: 64px;
+
+  /* shape */
+  --radius-sm: 6px;   /* chips, checkboxes, tags */
+  --radius-md: 8px;   /* buttons, inputs, selects, menu items */
+  --radius-lg: 12px;  /* cards, popovers, panels */
+  --radius-tile: 7px; /* 28px icon tiles in card headers */
+  --radius-xl: 16px;  /* dialogs, sheets */
+  --radius-full: 999px;
+  --border-width: 1px;
+
+  /* controls */
+  --control-sm: 28px; --control-md: 32px; --control-lg: 40px; --touch-min: 44px;
+
+  /* motion */
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --dur-fast: 120ms; --dur-base: 180ms; --dur-slow: 240ms;
+
+  /* layout */
+  --sidebar-w: 240px; --sidebar-w-collapsed: 64px; --topbar-h: 56px;
+
+  /* neutral scale */
+  --neutral-0: #FFFFFF; --neutral-50: #F7F8FA; --neutral-100: #F0F2F5; --neutral-200: #E4E7EC;
+  --neutral-300: #CDD2DA; --neutral-400: #9AA2AF; --neutral-500: #6B7380; --neutral-600: #4B5260;
+  --neutral-700: #353B47; --neutral-800: #232831; --neutral-900: #151921; --neutral-950: #0A0D13;
+
+  /* brand */
+  --indigo-50: #EEEDFC; --indigo-100: #DCD9FA; --indigo-300: #A59CFF; --indigo-400: #887CFD; --indigo-500: #6A5FE0; --indigo-600: #5347CE; --indigo-700: #4338B8;
+  /* data series, in order — never for text */
+  --chart-1: #5347CE; --chart-2: #887CFD; --chart-3: #4896FE; --chart-4: #16C8C7; --chart-rest: #EEF0F4; --chart-hatch: #C9CDD6;
+  --chart-focus: linear-gradient(180deg, #5347CE 0%, #A59CFF 100%);
+  --teal-50: #E8F5F3; --teal-100: #CDEBE7; --teal-400: #2DB3A6; --teal-500: #14928F; --teal-600: #0E7C7B; --teal-700: #0B6A69; --teal-800: #0B5251;
+  --blue-50: #EAF0FB; --blue-100: #D3E0F7; --blue-400: #6E9BF0; --blue-500: #2F6BD8; --blue-600: #1F4FA8; --blue-700: #0B3D91; --blue-800: #0A2F70;
+  --gold-500: #D9A04A; --ink: #05070D;
+
+  /* type additions (Peacock primitives): overline / kbd / table header */
+  --text-11: 11px; --lh-11: 14px;
+
+  /* phase 1a: data components (DESIGN.md › Typography, Data display) */
+  --text-10: 10px;                     /* half-donut caption */
+  --text-11-5: 11.5px; --lh-11-5: 14px; /* chart axis labels */
+  --lh-delta: 20px;                    /* delta pill, 11.5/20 */
+  --lh-20-tight: 26px;                 /* secondary metric, 20/26 */
+  --text-22: 22px;                     /* half-donut total */
+  --text-30: 30px; --lh-30: 36px;      /* chart headline number */
+  --radius-delta: 5px;                 /* delta pills */
+  --radius-stack: 3px;                 /* stacked-bar segments */
+  --radius-progress: 2px;              /* progress bars, legend swatches */
+  --ring-selected: 1.5px;              /* selected KPI card ring */
+  /* phase 1b: app shell */
+  --shell-sidebar-w: 256px;           /* COMPONENTS.md > Sidebar (handoff --sidebar-w is 240) */
+  --shell-sidebar-w-collapsed: 72px;  /* handoff --sidebar-w-collapsed is 64 */
+  --radius-item: 10px;                /* sidebar items, workspace button, footer card */
+  --text-15: 15px; --lh-15: 20px;     /* sidebar item, top-bar title */
+  --lh-badge: 20px;                   /* count and "New" badges are 20px tall */
+  --tracking-badge: 0.04em;
+}
+
+/* Light semantic set. Also keyed on [data-theme="light"] so a light subtree can
+ * sit inside a dark page (dev gallery side-by-side), mirroring the dark block. */
+:root,
+[data-theme="light"] {
+  /* ===== light semantic ===== */
+  color-scheme: light;        /* native scrollbars and form controls */
+  --bg-canvas: #F6F7F9;      /* app canvas behind cards */
+  --bg: #FFFFFF;             /* cards, sidebar, topbar */
+  --bg-subtle: #F7F8FA;      /* sidebar, table header, calendar weekend */
+  --bg-muted: #F0F2F5;       /* hover rows, segmented track */
+  --bg-raised: #FFFFFF;      /* cards, popovers */
+  --bg-inverse: #151921;
+  --border: #E8EAEE;
+  --border-control: #E1E4EA; /* secondary buttons, inputs */
+  --border-strong: #CDD2DA;
+  --fg: #151921;             /* 17.1:1 on bg */
+  --fg-muted: #4B5260;       /* 8.0:1 */
+  --fg-subtle: #6B7380;      /* 4.8:1 — minimum for text */
+  --fg-placeholder: #9AA2AF; /* non-text only */
+  --fg-on-accent: #FFFFFF;
+
+  --primary: #5347CE;        /* 6.3:1 with white */
+  --primary-hover: #4338B8;
+  --primary-subtle: #EEEDFC;
+  --primary-fg: #4338B8;     /* indigo text on subtle bg */
+  --primary-ring: #DCD9FA;   /* focus halo on inputs */
+  --accent: #0B3D91;         /* peacock blue */
+  --accent-subtle: #EAF0FB;
+  --accent-fg: #1F4FA8;
+  --focus-ring: #5347CE;
+  --delta-up-fg: #0A7A55; --delta-up-bg: #E7F7F0; --delta-up-border: #C5EBDA;
+  --delta-down-fg: #C02B2B; --delta-down-bg: #FDECEC; --delta-down-border: #F7CFCF;
+  --shadow-control: 0 1px 2px rgba(16,24,40,.05);
+
+  --success: #1E7F4A; --success-bg: #E8F5EE; --success-border: #BFE3CD;
+  --warning: #94570A; --warning-bg: #FDF4E3; --warning-border: #F3D9A4;
+  --danger:  #B42318; --danger-bg:  #FDECEA; --danger-border:  #F6C9C4; --danger-solid: #C2362B;
+  --info:    #1F4FA8; --info-bg:    #EAF0FB; --info-border:    #C9D8F5;
+
+  /* labels: fg / bg / dot */
+  --label-neutral-fg: #4B5260; --label-neutral-bg: #F0F2F5; --label-neutral-dot: #8A919E;
+  --label-blue-fg:    #1F4FA8; --label-blue-bg:    #EAF0FB; --label-blue-dot:    #2F6BD8;
+  --label-teal-fg:    #0B6A69; --label-teal-bg:    #E3F4F2; --label-teal-dot:    #14928F;
+  --label-green-fg:   #1E7F4A; --label-green-bg:   #E7F5EC; --label-green-dot:   #2A9D5C;
+  --label-amber-fg:   #94570A; --label-amber-bg:   #FCF1DC; --label-amber-dot:   #D98A12;
+  --label-red-fg:     #B42318; --label-red-bg:     #FCEBE9; --label-red-dot:     #D64535;
+  --label-violet-fg:  #6B3FC4; --label-violet-bg:  #F1ECFC; --label-violet-dot:  #8457E0;
+  --label-pink-fg:    #B0306E; --label-pink-bg:    #FCEAF3; --label-pink-dot:    #D6478B;
+
+  /* depth — popovers and dialogs only */
+  --shadow-popover: 0 0 0 1px rgba(16,24,40,.06), 0 8px 24px -6px rgba(16,24,40,.14);
+  --shadow-dialog:  0 0 0 1px rgba(16,24,40,.06), 0 24px 48px -12px rgba(16,24,40,.22);
+  --overlay: rgba(10,13,19,.40);
+
+  /* ---- additions for Peacock primitives (Phase 0.5a) ---- */
+  --bg-hover: #F3F4F6;              /* ghost button / menu / sidebar hover fill */
+  --fg-inverse: #F7F8FA;            /* text on --bg-inverse (tooltip, toast) */
+  --fg-inverse-muted: #9AA2AF;      /* secondary text / action on --bg-inverse */
+  --fg-inverse-success: #5CCFC3;    /* success icon in a toast */
+  --danger-solid-hover: #A82D23;
+  --shadow-segment: 0 0 0 1px #E3E6EB, 0 1px 2px rgba(16,24,40,.08);
+  --skeleton: #EDEFF2;
+
+  /* StatusChip tones: fg / bg / border */
+  --chip-neutral-fg: #4B5260; --chip-neutral-bg: #F0F2F5; --chip-neutral-border: #E4E7EC;
+  --chip-blue-fg:    #1F4FA8; --chip-blue-bg:    #EAF0FB; --chip-blue-border:    #C9D8F5;
+  --chip-primary-fg: #4338B8; --chip-primary-bg: #EEEDFC; --chip-primary-border: #D9D6F8;
+  --chip-green-fg:   #1E7F4A; --chip-green-bg:   #E8F5EE; --chip-green-border:   #BFE3CD;
+  --chip-amber-fg:   #94570A; --chip-amber-bg:   #FDF4E3; --chip-amber-border:   #F3D9A4;
+  --chip-red-fg:     #B42318; --chip-red-bg:     #FDECEA; --chip-red-border:     #F6C9C4;
+  --chip-violet-fg:  #6B3FC4; --chip-violet-bg:  #F1ECFC; --chip-violet-border:  #DDD0F7;
+  --chip-review-fg:  #7A4706; --chip-review-bg:  #FCE8C3; --chip-review-border:  #E3B25C;
+
+  /* phase 1a: data components */
+  --chart-track: #F1F2F5;    /* half-donut track */
+  --border-row: #EEF0F3;     /* in-card table / legend row dividers */
+  --progress-track: #EDEFF2; /* progress bar track */
+
+  /* lane A: brand marks (DESIGN.md › Iconography; X uses currentColor) */
+  --brand-linkedin: #0A66C2;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-canvas: #08090D; --bg: #0B0D12; --bg-subtle: #101318; --bg-muted: #171B22; --bg-raised: #14171D; --bg-inverse: #ECEEF2;
+  --border: #252A33; --border-strong: #343A45;
+  --fg: #ECEEF2; --fg-muted: #B4BAC5; --fg-subtle: #8A919E; --fg-placeholder: #5D6470; --fg-on-accent: #04110F;
+
+  --primary: #8B80FF; --primary-hover: #A59CFF; --primary-subtle: #1E1A3D; --primary-fg: #B8B1FF; --primary-ring: #332C66;
+  --chart-1: #8B80FF; --chart-2: #6A5FE0; --chart-3: #6EAEFF; --chart-4: #2ED3D2; --chart-rest: #1E222A; --chart-hatch: #343A45;
+  --accent: #6E9BF0; --accent-subtle: #121E36; --accent-fg: #8DB0F5;
+  --focus-ring: #A59CFF;
+  --delta-up-fg: #5CC98E; --delta-up-bg: #0F2A1D; --delta-up-border: #1D4A33;
+  --delta-down-fg: #F2857B; --delta-down-bg: #33171A; --delta-down-border: #5A2428;
+
+  --success: #5CC98E; --success-bg: #0F2A1D; --success-border: #1D4A33;
+  --warning: #E9B25E; --warning-bg: #2C2110; --warning-border: #4D3815;
+  --danger:  #F2857B; --danger-bg:  #33171A; --danger-border:  #5A2428; --danger-solid: #E5564A;
+  --info:    #8DB0F5; --info-bg:    #121E36; --info-border:    #233A66;
+
+  --label-neutral-fg: #B4BAC5; --label-neutral-bg: #1E222A;
+  --label-blue-fg:    #8DB0F5; --label-blue-bg:    #152340;
+  --label-teal-fg:    #5CCFC3; --label-teal-bg:    #0E2A29;
+  --label-green-fg:   #6FD39C; --label-green-bg:   #10281B;
+  --label-amber-fg:   #EDB45E; --label-amber-bg:   #2C2110;
+  --label-red-fg:     #F49086; --label-red-bg:     #331719;
+  --label-violet-fg:  #B79CF5; --label-violet-bg:  #231A3A;
+  --label-pink-fg:    #F08CBE; --label-pink-bg:    #33172A;
+
+  --shadow-popover: 0 0 0 1px rgba(255,255,255,.06), 0 12px 32px -8px rgba(0,0,0,.6);
+  --shadow-dialog:  0 0 0 1px rgba(255,255,255,.06), 0 28px 56px -12px rgba(0,0,0,.7);
+  --overlay: rgba(0,0,0,.60);
+
+  /* ---- additions for Peacock primitives (Phase 0.5a) ---- */
+  --border-control: #2B303A;        /* was missing from the dark set */
+  --shadow-control: 0 1px 2px rgba(0,0,0,.4);
+  --bg-hover: #171B22;
+  --fg-inverse: #151921;
+  --fg-inverse-muted: #4B5260;
+  --fg-inverse-success: #0B6A69;
+  --danger-solid-hover: #CF4A3F;
+  --shadow-segment: 0 0 0 1px rgba(255,255,255,.08), 0 1px 2px rgba(0,0,0,.4);
+  --skeleton: #1E222A;
+
+  --chip-neutral-fg: #B4BAC5; --chip-neutral-bg: #1E222A; --chip-neutral-border: #2B303A;
+  --chip-blue-fg:    #8DB0F5; --chip-blue-bg:    #152340; --chip-blue-border:    #233A66;
+  --chip-primary-fg: #B8B1FF; --chip-primary-bg: #1E1A3D; --chip-primary-border: #332C66;
+  --chip-green-fg:   #6FD39C; --chip-green-bg:   #10281B; --chip-green-border:   #1D4A33;
+  --chip-amber-fg:   #EDB45E; --chip-amber-bg:   #2C2110; --chip-amber-border:   #4D3815;
+  --chip-red-fg:     #F49086; --chip-red-bg:     #331719; --chip-red-border:     #5A2428;
+  --chip-violet-fg:  #B79CF5; --chip-violet-bg:  #231A3A; --chip-violet-border:  #3A2C5E;
+  --chip-review-fg:  #F5C77A; --chip-review-bg:  #3A2A0E; --chip-review-border:  #7A5A1E;
+
+  /* phase 1a: data components */
+  --chart-track: #171B22;
+  --border-row: #1E222A;
+  --progress-track: #1E222A;
+
+  /* lane A: LinkedIn's dark-surface blue keeps the mark above 3:1 */
+  --brand-linkedin: #70B5F9;
+}
+
+:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition-duration: 0ms !important; animation-duration: 0ms !important; } }
+
+/* lane B: Posts calendar cards (COMPONENTS.md › PostCard) */
+:root,
+[data-theme="light"] {
+  --card-review-bg: #FFFAF0;  /* needs manual review card fill */
+  --card-review-ring: #E3B25C;
+  --card-failed-bg: #FFF7F6;  /* failed card fill */
+  --card-failed-ring: #F1B8B1;
+}
+[data-theme="dark"] {
+  --card-review-bg: #221A0C;
+  --card-review-ring: #7A5A1E;
+  --card-failed-bg: #1F1214;
+  --card-failed-ring: #5A2428;
+}
+
+/* lane E: sign-in hero. The hero always sits on ink, so these
+ * are the same in both themes (repeated under dark for clarity). */
+:root,
+[data-theme="dark"] {
+  --hero-fg: #F4F5F7;                       /* "Peacock" on ink */
+  --hero-fg-muted: #B4BAC5;                 /* brand line on ink */
+  --hero-band-h: 260px;                     /* mobile header band */
+}
+
+/* leads v2 primitives: Switch. The off track is the placeholder grey, darker
+ * than --border-strong so the control reads on a white card. */
+:root,
+[data-theme="light"] {
+  --switch-thumb: #FFFFFF;
+  --switch-track-off: #9AA2AF;
+}
+[data-theme="dark"] {
+  --switch-thumb: #ECEEF2;
+  --switch-track-off: #5D6470;
+}

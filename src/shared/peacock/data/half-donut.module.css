@@ -1,0 +1,93 @@
+.root {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+  font-family: var(--font-sans);
+}
+
+.legend {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legendItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  padding-left: 10px;
+  box-shadow: inset 2px 0 0 var(--series);
+}
+
+.legendLabel {
+  overflow: hidden;
+  color: var(--fg-muted);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.legendValue {
+  color: var(--fg);
+  font-size: var(--text-20);
+  line-height: var(--lh-20-tight);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-tight);
+  font-variant-numeric: tabular-nums;
+}
+
+.plot {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.plot svg {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+}
+
+.track {
+  fill: none;
+  stroke: var(--chart-track);
+  stroke-width: 40;
+}
+
+.arc {
+  fill: none;
+  stroke: var(--series);
+  stroke-width: 38;
+}
+
+.hatchBg {
+  fill: var(--bg-canvas);
+}
+
+.hatchLine {
+  stroke: var(--chart-hatch);
+  stroke-width: 1.2;
+}
+
+.total {
+  fill: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--text-22);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-tighter);
+  font-variant-numeric: tabular-nums;
+}
+
+.caption {
+  fill: var(--fg-subtle);
+  font-family: var(--font-sans);
+  font-size: var(--text-10);
+  font-weight: var(--weight-regular);
+}
