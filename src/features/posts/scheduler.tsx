@@ -55,6 +55,8 @@ export type ComposeRequest =
 export type SchedulerProps = {
   /** Posts of the selected profiles (all states). */
   posts: readonly Post[];
+  /** Every account's posts, so the Filters count can say "x of all". */
+  everyonePosts: readonly Post[];
   loading: boolean;
   error: Error | null;
   onRetry: () => void;
@@ -120,6 +122,7 @@ function slotTime(date: string, today: string): string {
 /** Calendar view with toolbar, filters, drafts and drag moves (Peacock's Scheduler). */
 export function Scheduler({
   posts,
+  everyonePosts,
   loading,
   error,
   onRetry,
@@ -161,6 +164,10 @@ export function Scheduler({
   const allEntries = useMemo(
     () => (now ? buildEntries(posts, now.ms).filter((entry) => dayDates.has(entry.date)) : []),
     [posts, now, dayDates],
+  );
+  const everyoneInRange = useMemo(
+    () => (now ? buildEntries(everyonePosts, now.ms).filter((entry) => dayDates.has(entry.date)).length : 0),
+    [everyonePosts, now, dayDates],
   );
   const entries = useMemo(() => allEntries.filter((entry) => matchesFilters(entry, filters)), [allEntries, filters]);
   const byDate = useMemo(() => groupByDate(entries), [entries]);
@@ -329,7 +336,7 @@ export function Scheduler({
         Drafts
         <span className={styles.toolCount}>{loading ? "" : drafts.length}</span>
       </button>
-      <FiltersPopover filters={filters} onChange={setFilters} shown={shown} total={total} />
+      <FiltersPopover filters={filters} onChange={setFilters} shown={shown} total={everyoneInRange} />
       {mobile ? null : (
         <Segmented label="Calendar view" size="compact" options={VIEW_OPTIONS} value={view} onChange={setView} />
       )}

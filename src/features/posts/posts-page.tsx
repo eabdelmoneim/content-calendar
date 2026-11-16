@@ -216,6 +216,7 @@ export function PostsPage(): React.JSX.Element {
         anchorDate ? (
           <Scheduler
             posts={posts}
+            everyonePosts={postsQuery.data ?? []}
             loading={loading}
             error={error}
             onRetry={() => void postsQuery.refetch()}

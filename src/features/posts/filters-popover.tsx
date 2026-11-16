@@ -1,8 +1,9 @@
 "use client";
 
 import { ListFilter } from "lucide-react";
-import { CHIP_STATUS_MAP, Checkbox, Popover, cx } from "@/shared/peacock/ui";
+import { Avatar, CHIP_STATUS_MAP, Checkbox, Popover, cx } from "@/shared/peacock/ui";
 import { PLATFORMS } from "@/lib/types";
+import { useProfileSelection } from "@/shared/shell/profile-selection";
 import {
   EMPTY_FILTERS,
   FILTER_STATUSES,
@@ -22,11 +23,27 @@ export type FiltersPopoverProps = {
 };
 
 /**
- * Filters popover: Status and Platform (Peacock SCREENS.md › Posts). Which
- * people's posts appear follows the top-bar account selector.
+ * Filters popover: Account, Status and Platform (Peacock SCREENS.md › Posts).
+ * Account is the same selection as the top-bar account selector, so the two
+ * always agree. Like the other sections, nothing ticked means everyone.
  */
 export function FiltersPopover({ filters, onChange, shown, total }: FiltersPopoverProps): React.JSX.Element {
-  const count = filterCount(filters);
+  const selection = useProfileSelection();
+  const accountIds = selection.members.map((member) => member.memberId);
+  const allAccounts = accountIds.every((id) => selection.isSelected(id));
+  const accountCount = allAccounts ? 0 : selection.selectedProfileIds.length;
+  const count = filterCount(filters) + accountCount;
+
+  function toggleAccount(profileId: string): void {
+    if (allAccounts) {
+      selection.selectOnlyProfile?.(profileId);
+    } else if (selection.selectedProfileIds.length === 1 && selection.isSelected(profileId)) {
+      // Unticking the last one means "no account filter", i.e. everyone.
+      selection.selectAllProfiles?.();
+    } else {
+      selection.toggleProfile(profileId);
+    }
+  }
   return (
     <Popover
       label="Filters"
@@ -55,11 +72,43 @@ export function FiltersPopover({ filters, onChange, shown, total }: FiltersPopov
           type="button"
           className={styles.textButton}
           disabled={count === 0}
-          onClick={() => onChange(EMPTY_FILTERS)}
+          onClick={() => {
+            onChange(EMPTY_FILTERS);
+            selection.selectAllProfiles?.();
+          }}
         >
           Clear all
         </button>
       </div>
+
+      {selection.members.length > 1 ? (
+        <section className={styles.filterSection} aria-label="Account">
+          <div className={styles.filterSectionHead}>
+            <span>Account</span>
+            {accountCount > 0 ? (
+              <button type="button" className={styles.textButton} onClick={() => selection.selectAllProfiles?.()}>
+                Clear
+              </button>
+            ) : null}
+          </div>
+          <div className={styles.checkList}>
+            {selection.members.map((member) => (
+              <Checkbox
+                key={member.memberId}
+                className={styles.checkRow}
+                checked={!allAccounts && selection.isSelected(member.memberId)}
+                onCheckedChange={() => toggleAccount(member.memberId)}
+                label={
+                  <span className={styles.checkLabel}>
+                    <Avatar name={member.name} src={member.profilePictureUrl} size={16} decorative />
+                    <span className={styles.checkName}>{member.name}</span>
+                  </span>
+                }
+              />
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section className={styles.filterSection} aria-label="Status">
         <div className={styles.filterSectionHead}>
