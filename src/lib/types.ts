@@ -72,6 +72,24 @@ export type Asset = {
   usedInPostIds: string[];
 };
 
+/** A planned asset on the Assets › To-do list. */
+export type AssetTodo = {
+  id: string;
+  title: string;
+  /** Calendar day (YYYY-MM-DD) it should be finished by. */
+  dueOn: string | null;
+  /** Who is on the hook for it; a person's name, or null when unassigned. */
+  assigneeName: string | null;
+  completedAt: string | null;
+  completedByName: string | null;
+  createdByName: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export const MAX_TODO_TITLE = 500;
+export const MAX_ASSIGNEE_NAME = 120;
+
 export type FollowerSnapshot = {
   profileId: string;
   platform: Platform;

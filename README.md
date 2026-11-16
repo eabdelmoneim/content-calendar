@@ -10,7 +10,9 @@ on one shared calendar. V1 has three tabs:
 - **Analytics.** Numbers per post and per account, plus one rollup across all
   accounts.
 - **Assets.** A shared image library: upload images, then pick them into a
-  post.
+  post. Its **To-do** tab (`/assets?tab=todo`) lists the assets the team plans
+  to make, each with an optional due date and a checkbox that crosses it out
+  when done.
 
 **Settings** holds the accounts that post. Each one is a person or brand with
 an optional LinkedIn account and an optional X account.
@@ -42,6 +44,7 @@ tables prefixed `cc_`:
 - `cc_post_assets`
 - `cc_post_metrics`
 - `cc_follower_snapshots`
+- `cc_asset_todos` (Assets › To-do; `supabase/migrations/0004_asset_todos.sql`)
 
 Images go in a private Storage bucket, `cc-assets`.
 

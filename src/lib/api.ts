@@ -10,6 +10,7 @@ import {
 
 import type {
   Asset,
+  AssetTodo,
   FollowerSnapshot,
   Platform,
   Post,
@@ -59,6 +60,7 @@ export const keys = {
   posts: ["posts"] as const,
   assets: ["assets"] as const,
   followers: ["followers"] as const,
+  todos: ["asset-todos"] as const,
 };
 
 /* ----------------------------------------------------------- reads */
@@ -87,6 +89,14 @@ export function useAssets(): UseQueryResult<Asset[]> {
   return useQuery({
     queryKey: keys.assets,
     queryFn: async () => (await api<{ assets: Asset[] }>("/api/assets")).assets,
+  });
+}
+
+export function useAssetTodos(): UseQueryResult<AssetTodo[]> {
+  return useQuery({
+    queryKey: keys.todos,
+    queryFn: async () => (await api<{ todos: AssetTodo[] }>("/api/asset-todos")).todos,
+    refetchInterval: 60_000,
   });
 }
 
@@ -299,6 +309,58 @@ export function useArchiveAsset() {
   const invalidate = useInvalidate(keys.assets);
   return useMutation({
     mutationFn: (id: string) => api(`/api/assets/${id}`, { method: "DELETE" }),
+    onSuccess: invalidate,
+  });
+}
+
+export function useAddAssetTodo() {
+  const invalidate = useInvalidate(keys.todos);
+  return useMutation({
+    mutationFn: (input: { title: string; dueOn: string | null; assigneeName: string | null }) =>
+      api<{ todo: AssetTodo }>("/api/asset-todos", { method: "POST", body: json(input) }).then((r) => r.todo),
+    onSuccess: invalidate,
+  });
+}
+
+export type AssetTodoChanges = { title?: string; dueOn?: string | null; assigneeName?: string | null; done?: boolean };
+
+/** Applies the change to the cached list at once and rolls back if the server refuses. */
+export function useUpdateAssetTodo() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, changes }: { id: string; changes: AssetTodoChanges }) =>
+      api<{ todo: AssetTodo }>(`/api/asset-todos/${id}`, { method: "PATCH", body: json(changes) }).then((r) => r.todo),
+    onMutate: async ({ id, changes }) => {
+      await client.cancelQueries({ queryKey: keys.todos });
+      const previous = client.getQueryData<AssetTodo[]>(keys.todos);
+      client.setQueryData<AssetTodo[]>(keys.todos, (list) =>
+        list?.map((todo) =>
+          todo.id !== id
+            ? todo
+            : {
+                ...todo,
+                ...(changes.title !== undefined ? { title: changes.title } : {}),
+                ...(changes.dueOn !== undefined ? { dueOn: changes.dueOn } : {}),
+                ...(changes.assigneeName !== undefined ? { assigneeName: changes.assigneeName } : {}),
+                ...(changes.done !== undefined
+                  ? { completedAt: changes.done ? new Date().toISOString() : null }
+                  : {}),
+              },
+        ),
+      );
+      return { previous };
+    },
+    onError: (_error, _vars, context) => {
+      if (context?.previous) client.setQueryData(keys.todos, context.previous);
+    },
+    onSettled: () => client.invalidateQueries({ queryKey: keys.todos }),
+  });
+}
+
+export function useRemoveAssetTodo() {
+  const invalidate = useInvalidate(keys.todos);
+  return useMutation({
+    mutationFn: (id: string) => api(`/api/asset-todos/${id}`, { method: "DELETE" }),
     onSuccess: invalidate,
   });
 }

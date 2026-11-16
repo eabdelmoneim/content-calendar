@@ -1,0 +1,253 @@
+/* Assets › To-do. Tokens only. */
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--bg-canvas);
+  font-family: var(--font-sans);
+  color: var(--fg);
+}
+
+.addRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-6) var(--space-3);
+}
+
+.addTitle {
+  flex: 1;
+  min-width: 0;
+  max-width: 640px;
+}
+
+.addAssignee {
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.addDate {
+  width: 160px;
+  flex-shrink: 0;
+}
+
+.alertRow {
+  padding: 0 var(--space-6) var(--space-3);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-6) var(--space-3);
+}
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 var(--space-6) var(--space-6);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 880px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+}
+
+.check {
+  flex-shrink: 0;
+}
+
+.text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  color: var(--fg-subtle);
+  font-size: var(--text-11);
+  line-height: var(--lh-11);
+}
+
+.rowDone {
+  background: var(--bg-subtle);
+}
+
+.rowDone .title {
+  color: var(--fg-subtle);
+  text-decoration: line-through;
+}
+
+.assigneeFilter {
+  width: 200px;
+}
+
+.assignee,
+.due {
+  flex-shrink: 0;
+}
+
+.assigneeEdit {
+  width: 180px;
+}
+
+.assigneeButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 180px;
+  height: 26px;
+  padding: 0 var(--space-2) 0 3px;
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--fg-muted);
+  font-size: var(--text-12);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.assigneeButton:hover {
+  border-color: var(--border);
+  background: var(--bg-hover);
+}
+
+.assigneeName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.unassigned {
+  padding-left: var(--space-2);
+  border: var(--border-width) dashed var(--border);
+  color: var(--fg-subtle);
+}
+
+.dateEdit {
+  width: 160px;
+}
+
+.dueButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 var(--space-2);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--fg-muted);
+  font-size: var(--text-12);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.dueButton:hover {
+  background: var(--bg-hover);
+}
+
+.noDue {
+  border-style: dashed;
+  color: var(--fg-subtle);
+}
+
+.overdue {
+  border-color: var(--danger-border);
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.dueToday {
+  border-color: var(--warning-border);
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+.rowDone .dueButton {
+  color: var(--fg-subtle);
+  text-decoration: line-through;
+}
+
+.actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 2px;
+}
+
+@media (max-width: 767px) {
+  .addRow {
+    flex-wrap: wrap;
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .addTitle {
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  .addAssignee,
+  .addDate {
+    flex: 1;
+    width: auto;
+  }
+
+  .toolbar {
+    flex-wrap: wrap;
+  }
+
+  .toolbar,
+  .scroll,
+  .alertRow {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+
+  .row {
+    flex-wrap: wrap;
+  }
+
+  /* Line 1: checkbox, text, actions. Line 2: assignee and due date. */
+  .text {
+    flex: 1 1 60%;
+  }
+
+  .actions {
+    order: 2;
+  }
+
+  .assignee {
+    order: 3;
+    margin-left: 28px;
+  }
+
+  .due {
+    order: 4;
+  }
+}
