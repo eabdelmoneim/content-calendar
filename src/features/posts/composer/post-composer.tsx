@@ -60,7 +60,6 @@ import { closeModal, ComposerShell, SettingsSection } from "./composer-shell";
 import { LinkedInFeedPreview, type PreviewImage } from "./linkedin-feed-preview";
 import { PostEditor, textToHtml } from "./post-editor";
 import { handOffMedia, handoffMessage } from "./media-handoff";
-import { PasteButton } from "./paste-button";
 import { timeZoneLabel } from "./time-zone";
 import { X_STANDARD_LIMIT, XFeedPreview } from "./x-feed-preview";
 import styles from "./composer.module.css";
@@ -762,12 +761,6 @@ export function PostComposer({
                 }}
                 fieldClassName={styles.urlField}
               />
-              <PasteButton
-                disabled={busy}
-                compact
-                onPaste={(pasted) => addMediaLink(pasted)}
-                onError={setLinkError}
-              />
               <Button
                 size="sm"
                 type="submit"
@@ -964,15 +957,6 @@ export function PostComposer({
                 disabled={busy}
                 onChange={(event) => setLiveUrl(event.target.value)}
                 fieldClassName={styles.urlField}
-              />
-              <PasteButton
-                disabled={busy}
-                compact
-                onPaste={(text) => {
-                  setError(null);
-                  setLiveUrl(text);
-                }}
-                onError={setError}
               />
               <Button
                 size="sm"
@@ -1203,14 +1187,6 @@ export function PostComposer({
                 value={markUrl}
                 onChange={(event) => setMarkUrl(event.target.value)}
                 fieldClassName={styles.urlField}
-              />
-              <PasteButton
-                disabled={publish.isPending}
-                onPaste={(text) => {
-                  setError(null);
-                  setMarkUrl(text);
-                }}
-                onError={setError}
               />
             </div>
             {error && marking ? <InlineAlert tone="danger">{error}</InlineAlert> : null}
