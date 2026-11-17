@@ -6,6 +6,7 @@ import { useEffect, useEffectEvent, useMemo, useRef, useState, useSyncExternalSt
 import { usePosts } from "@/lib/api";
 import type { Post, Profile } from "@/lib/types";
 import { useShellPane } from "@/shared/peacock/shell";
+import { NAV_CLICK_EVENT, type NavId } from "@/shared/peacock/shell/nav";
 import { Button, Skeleton, Tabs, useToast } from "@/shared/peacock/ui";
 import { useProfileSelection } from "@/shared/shell/profile-selection";
 import { todayKey } from "./calendar-model";
@@ -54,6 +55,20 @@ export function PostsPage(): React.JSX.Element {
     setSeenTabParam(tabParam);
     if (tabParam) setTabState(tabParam);
   }
+
+  // Clicking Posts in the sidebar goes back to this month's calendar, even
+  // when Posts is already open (in Day view, another month or another tab).
+  const [schedulerKey, setSchedulerKey] = useState(0);
+  useEffect(() => {
+    function onNavClick(event: Event): void {
+      if ((event as CustomEvent<NavId>).detail !== "posts") return;
+      setTabState("scheduler");
+      setAnchorDate(null);
+      setSchedulerKey((key) => key + 1);
+    }
+    window.addEventListener(NAV_CLICK_EVENT, onNavClick);
+    return () => window.removeEventListener(NAV_CLICK_EVENT, onNavClick);
+  }, []);
 
   useEffect(() => {
     const update = () => setNow(Date.now());
@@ -215,6 +230,7 @@ export function PostsPage(): React.JSX.Element {
       {tab === "scheduler" ? (
         anchorDate ? (
           <Scheduler
+            key={schedulerKey}
             posts={posts}
             everyonePosts={postsQuery.data ?? []}
             loading={loading}
