@@ -2,6 +2,7 @@ import {
   CalendarDays,
   ChartNoAxesColumn,
   Images,
+  ListTodo,
   Settings,
   type LucideIcon,
 } from "lucide-react";
@@ -11,10 +12,11 @@ export const ROUTES = {
   posts: "/posts",
   analytics: "/analytics",
   assets: "/assets",
+  todo: "/todo",
   settings: "/settings",
 } as const;
 
-export type NavId = "posts" | "analytics" | "assets" | "settings";
+export type NavId = "posts" | "analytics" | "assets" | "todo" | "settings";
 
 export type NavItem = {
   id: NavId;
@@ -46,6 +48,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
         icon: ChartNoAxesColumn,
       },
       { id: "assets", label: "Assets", href: ROUTES.assets, icon: Images },
+      { id: "todo", label: "To-Do", href: ROUTES.todo, icon: ListTodo },
     ],
   },
   {
@@ -66,6 +69,17 @@ export function visibleNavGroups(isGlobalAdmin: boolean): readonly NavGroup[] {
   return NAV_GROUPS.filter((group) => !group.adminOnly || isGlobalAdmin).map(
     (group) => group,
   );
+}
+
+/**
+ * Fired when someone clicks a sidebar item. A screen that is already open
+ * listens for its own id and goes back to its starting view (Posts → this
+ * month's calendar), since following a link to the current page does nothing.
+ */
+export const NAV_CLICK_EVENT = "cc:nav-click";
+
+export function announceNavClick(id: NavId): void {
+  window.dispatchEvent(new CustomEvent<NavId>(NAV_CLICK_EVENT, { detail: id }));
 }
 
 export function isActivePath(pathname: string, href: string): boolean {

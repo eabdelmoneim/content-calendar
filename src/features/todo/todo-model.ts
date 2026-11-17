@@ -1,6 +1,14 @@
 import type { AssetTodo } from "@/lib/types";
 
-export type TodoFilter = "all" | "open" | "done";
+export type TodoFilter = "all" | "not_started" | "in_progress" | "done";
+
+export type TodoState = "not_started" | "in_progress" | "done";
+
+/** Done wins; otherwise in progress once someone has started it. */
+export function todoState(todo: AssetTodo): TodoState {
+  if (todo.completedAt !== null) return "done";
+  return todo.startedAt !== null ? "in_progress" : "not_started";
+}
 
 /** The device's calendar day as YYYY-MM-DD. */
 export function localDayKey(date: Date = new Date()): string {
@@ -29,9 +37,8 @@ export function sortTodos(todos: readonly AssetTodo[]): AssetTodo[] {
 }
 
 export function filterTodos(todos: readonly AssetTodo[], filter: TodoFilter): AssetTodo[] {
-  if (filter === "open") return todos.filter((todo) => todo.completedAt === null);
-  if (filter === "done") return todos.filter((todo) => todo.completedAt !== null);
-  return [...todos];
+  if (filter === "all") return [...todos];
+  return todos.filter((todo) => todoState(todo) === filter);
 }
 
 export type DueState = "none" | "overdue" | "today" | "upcoming";
@@ -85,6 +92,7 @@ export function assigneeSuggestions(
     add(todo.assigneeName);
     add(todo.createdByName);
     add(todo.completedByName);
+    add(todo.startedByName);
   }
   const firstNames = names.map((name) => name.split(" ")[0].toLowerCase());
   for (const account of personAccounts) {

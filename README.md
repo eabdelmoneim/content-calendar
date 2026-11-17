@@ -1,7 +1,7 @@
 # Content Calendar
 
 A Nebula miniapp where the team plans, approves and tracks X and LinkedIn posts
-on one shared calendar. V1 has three tabs:
+on one shared calendar. V1 has four tabs:
 
 - **Posts.** A week or month calendar showing who posts what and when, plus a
   drafts queue and a rich-text composer with up to 20 images (X allows 4). A
@@ -10,9 +10,13 @@ on one shared calendar. V1 has three tabs:
 - **Analytics.** Numbers per post and per account, plus one rollup across all
   accounts.
 - **Assets.** A shared image library: upload images, then pick them into a
-  post. Its **To-do** tab (`/assets?tab=todo`) lists the assets the team plans
-  to make, each with an optional due date and a checkbox that crosses it out
-  when done.
+  post.
+- **To-Do.** Its own sidebar entry (`/todo`): the assets the team plans to
+  make, each with an assignee, an optional due date and a checkbox that
+  crosses it out when done. **Start** marks an item in progress, so the team
+  can see what's being worked on and by whom. The finished file (or a draft)
+  can be attached with the paperclip or dropped on the item; it also lands
+  in Assets.
 
 **Settings** holds the accounts that post. Each one is a person or brand with
 an optional LinkedIn account and an optional X account.
@@ -44,7 +48,8 @@ tables prefixed `cc_`:
 - `cc_post_assets`
 - `cc_post_metrics`
 - `cc_follower_snapshots`
-- `cc_asset_todos` (Assets › To-do; `supabase/migrations/0004_asset_todos.sql`)
+- `cc_asset_todos` (To-Do; `supabase/migrations/0004_asset_todos.sql`, plus
+  `0005_todo_attachments_progress.sql` for attached files and in progress)
 
 Images go in a private Storage bucket, `cc-assets`.
 

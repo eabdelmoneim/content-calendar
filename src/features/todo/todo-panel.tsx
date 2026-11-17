@@ -1,10 +1,24 @@
 "use client";
 
-import { CalendarClock, ListTodo, Pencil, Plus, RotateCcw, SearchX, Trash2, UserRound } from "lucide-react";
-import { useId, useMemo, useState, useSyncExternalStore, type FormEvent, type KeyboardEvent } from "react";
-
+import { useQueryClient } from "@tanstack/react-query";
+import { CalendarClock, CircleDot, ListTodo, Paperclip, Pencil, Play, Plus, RotateCcw, SearchX, Trash2, Upload, UserRound } from "lucide-react";
 import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type DragEvent,
+  type FormEvent,
+  type KeyboardEvent,
+} from "react";
+
+import { useAssetUploads } from "@/features/assets/use-asset-uploads";
+import {
+  keys,
   useAddAssetTodo,
+  useAssets,
   useAssetTodos,
   useProfiles,
   useRemoveAssetTodo,
@@ -12,7 +26,7 @@ import {
   useUpdateAssetTodo,
   type AssetTodoChanges,
 } from "@/lib/api";
-import { MAX_ASSIGNEE_NAME, MAX_TODO_TITLE, type AssetTodo } from "@/lib/types";
+import { MAX_ASSIGNEE_NAME, MAX_TODO_ATTACHMENTS, MAX_TODO_TITLE, type Asset, type AssetTodo } from "@/lib/types";
 import {
   Avatar,
   Button,
@@ -40,17 +54,21 @@ import {
   localDayKey,
   sortTodos,
   type TodoFilter,
+  todoState,
   UNASSIGNED,
 } from "./todo-model";
+import { AttachmentStrip, dragHasFiles, useFilePicker } from "./todo-attachments";
 import styles from "./todo.module.css";
 
 const ICON = { size: 15, strokeWidth: ICON_STROKE } as const;
 const subscribeNever = () => () => {};
 
 /**
- * Assets › To-do: what the team plans to make next, who is making it, an
+ * To-Do: what the team plans to make next, who is making it, an
  * optional due date and a checkbox that crosses it out when done. Shared by
  * the whole workspace, like the library, so people can hold each other to it.
+ * Files (the finished video or image) can be attached to an item; they are
+ * uploaded to the Assets library and shown on the to-do.
  */
 export function TodoPanel(): React.JSX.Element {
   const todosQuery = useAssetTodos();
@@ -58,6 +76,12 @@ export function TodoPanel(): React.JSX.Element {
   const update = useUpdateAssetTodo();
   const remove = useRemoveAssetTodo();
   const toast = useToast();
+  const client = useQueryClient();
+  const assetsQuery = useAssets();
+  const assetsById = useMemo(
+    () => new Map((assetsQuery.data ?? []).map((asset) => [asset.id, asset])),
+    [assetsQuery.data],
+  );
   const session = useSession();
   const profiles = useProfiles();
   const peopleListId = useId();
@@ -70,6 +94,37 @@ export function TodoPanel(): React.JSX.Element {
   const [filter, setFilter] = useState<TodoFilter>("all");
   const [assigneeFilter, setAssigneeFilter] = useState<string>(EVERYONE);
   const [removing, setRemoving] = useState<AssetTodo | null>(null);
+  // Files uploaded for the item being typed; attached when it's added.
+  const [staged, setStaged] = useState<string[]>([]);
+  const newUploads = useAssetUploads();
+  const newUploading = newUploads.uploads.some((entry) => entry.phase === "uploading");
+  useUploadProblems(newUploads.batchError, newUploads.clearBatchError);
+
+  async function stageFiles(files: File[]): Promise<void> {
+    const room = MAX_TODO_ATTACHMENTS - staged.length;
+    if (room <= 0) {
+      toast.show({ message: `A to-do can hold up to ${MAX_TODO_ATTACHMENTS} files.`, tone: "danger" });
+      return;
+    }
+    const uploaded = await newUploads.start(files.slice(0, room));
+    if (uploaded.length > 0) setStaged((current) => [...current, ...uploaded.map((asset) => asset.id)]);
+  }
+  const newPicker = useFilePicker((files) => void stageFiles(files));
+
+  /** Adds freshly uploaded files to an item, reading its latest attachments. */
+  function attach(todoId: string, uploaded: Asset[]): void {
+    if (uploaded.length === 0) return;
+    const latest = client.getQueryData<AssetTodo[]>(keys.todos)?.find((todo) => todo.id === todoId);
+    if (!latest) return;
+    const ids = [...latest.assetIds, ...uploaded.map((asset) => asset.id).filter((id) => !latest.assetIds.includes(id))];
+    change(latest, { assetIds: ids.slice(0, MAX_TODO_ATTACHMENTS) });
+    if (ids.length > MAX_TODO_ATTACHMENTS) {
+      toast.show({
+        message: `A to-do can hold up to ${MAX_TODO_ATTACHMENTS} files; the rest are in Assets.`,
+        tone: "danger",
+      });
+    }
+  }
 
   const viewerName = session.data?.user.name ?? null;
   const people = useMemo(
@@ -84,8 +139,8 @@ export function TodoPanel(): React.JSX.Element {
   const sorted = useMemo(() => sortTodos(todosQuery.data ?? []), [todosQuery.data]);
   const all = useMemo(() => filterByAssignee(sorted, assigneeFilter), [sorted, assigneeFilter]);
   const visible = useMemo(() => filterTodos(all, filter), [all, filter]);
-  const openCount = all.filter((todo) => todo.completedAt === null).length;
-  const doneCount = all.length - openCount;
+  const counts = { not_started: 0, in_progress: 0, done: 0 };
+  for (const todo of all) counts[todoState(todo)] += 1;
   const assigneeOptions = [
     { value: EVERYONE, label: "Everyone" },
     ...people.map((name) => ({ value: name, label: name === viewerName ? `${name} (me)` : name })),
@@ -98,16 +153,19 @@ export function TodoPanel(): React.JSX.Element {
     if (text.length === 0) return;
     const due = dueOn || null;
     const who = assignee.trim() || null;
+    const files = staged;
     // Clear at once so the next item can be typed; put it back if the save fails.
     // The assignee stays, since people often add several items for one person.
     setTitle("");
     setDueOn("");
+    setStaged([]);
     add.mutate(
-      { title: text, dueOn: due, assigneeName: who },
+      { title: text, dueOn: due, assigneeName: who, ...(files.length > 0 ? { assetIds: files } : {}) },
       {
         onError: () => {
           setTitle((current) => (current === "" ? text : current));
           setDueOn((current) => (current === "" ? (due ?? "") : current));
+          setStaged((current) => (current.length === 0 ? files : current));
         },
       },
     );
@@ -161,20 +219,39 @@ export function TodoPanel(): React.JSX.Element {
           value={dueOn}
           onChange={(event) => setDueOn(event.target.value)}
         />
+        <IconButton
+          aria-label="Attach files"
+          title="Attach the video or image (it also goes into Assets)"
+          icon={<Paperclip {...ICON} />}
+          onClick={newPicker.open}
+        />
+        {newPicker.input}
         <Button
           type="submit"
           variant="primary"
           icon={<Plus {...ICON} />}
-          disabled={title.trim().length === 0}
+          disabled={title.trim().length === 0 || newUploading}
+          title={newUploading ? "Wait for the files to finish uploading" : undefined}
         >
           Add
         </Button>
         <datalist id={peopleListId}>
-          {people.map((name) => (
-            <option key={name} value={name} />
-          ))}
+          {/* Suggestions come from cached client data, so they wait for hydration. */}
+          {today === null ? null : people.map((name) => <option key={name} value={name} />)}
         </datalist>
       </form>
+      {staged.length > 0 || newUploads.uploads.length > 0 ? (
+        <div className={styles.stagedRow}>
+          <AttachmentStrip
+            assetIds={staged}
+            assetsById={assetsById}
+            assetsLoading={assetsQuery.isPending}
+            uploads={newUploads.uploads}
+            onRemove={(id) => setStaged((current) => current.filter((existing) => existing !== id))}
+            onDismissUpload={newUploads.dismiss}
+          />
+        </div>
+      ) : null}
       {add.isError ? (
         <div className={styles.alertRow}>
           <InlineAlert tone="danger">{add.error.message}</InlineAlert>
@@ -189,8 +266,9 @@ export function TodoPanel(): React.JSX.Element {
           onChange={setFilter}
           options={[
             { value: "all", label: `All ${all.length}` },
-            { value: "open", label: `To do ${openCount}` },
-            { value: "done", label: `Done ${doneCount}` },
+            { value: "not_started", label: `Not started ${counts.not_started}` },
+            { value: "in_progress", label: `In progress ${counts.in_progress}` },
+            { value: "done", label: `Done ${counts.done}` },
           ]}
         />
         <Select
@@ -243,8 +321,20 @@ export function TodoPanel(): React.JSX.Element {
         ) : visible.length === 0 ? (
           <EmptyState
             icon={<SearchX />}
-            title={filter === "done" ? "Nothing finished yet" : "Everything's done"}
-            body={filter === "done" ? "Ticked items show up here, crossed out." : "Every item on the list is ticked off."}
+            title={
+              filter === "done"
+                ? "Nothing finished yet"
+                : filter === "in_progress"
+                  ? "Nothing in progress"
+                  : "Everything's started"
+            }
+            body={
+              filter === "done"
+                ? "Ticked items show up here, crossed out."
+                : filter === "in_progress"
+                  ? "Press Start on a to-do when you begin working on it, so everyone can see."
+                  : "Every open item is in progress or done."
+            }
             action={<Button onClick={() => setFilter("all")}>Show all</Button>}
           />
         ) : (
@@ -255,6 +345,9 @@ export function TodoPanel(): React.JSX.Element {
                   todo={todo}
                   today={today}
                   peopleListId={peopleListId}
+                  assetsById={assetsById}
+                  assetsLoading={assetsQuery.isPending}
+                  onAttach={(uploaded) => attach(todo.id, uploaded)}
                   onChange={(changes) => change(todo, changes)}
                   onRemove={() => {
                     remove.reset();
@@ -291,20 +384,73 @@ export function TodoPanel(): React.JSX.Element {
   );
 }
 
+/** Upload problems (wrong type, too big) as a toast, then clear them. */
+function useUploadProblems(problem: string | null, clear: () => void): void {
+  const toast = useToast();
+  useEffect(() => {
+    if (!problem) return;
+    toast.show({ message: problem, tone: "danger" });
+    clear();
+  }, [problem, clear, toast]);
+}
+
 function TodoRow({
   todo,
   today,
   peopleListId,
+  assetsById,
+  assetsLoading,
+  onAttach,
   onChange,
   onRemove,
 }: {
   todo: AssetTodo;
   today: string | null;
   peopleListId: string;
+  assetsById: ReadonlyMap<string, Asset>;
+  assetsLoading: boolean;
+  onAttach: (uploaded: Asset[]) => void;
   onChange: (changes: AssetTodoChanges) => void;
   onRemove: () => void;
 }): React.JSX.Element {
-  const done = todo.completedAt !== null;
+  const uploads = useAssetUploads();
+  useUploadProblems(uploads.batchError, uploads.clearBatchError);
+  const dragDepth = useRef(0);
+  const [dragging, setDragging] = useState(false);
+
+  async function upload(files: File[]): Promise<void> {
+    onAttach(await uploads.start(files));
+  }
+  const picker = useFilePicker((files) => void upload(files));
+
+  const dropHandlers = {
+    onDragEnter: (event: DragEvent<HTMLDivElement>) => {
+      if (!dragHasFiles(event)) return;
+      event.preventDefault();
+      dragDepth.current += 1;
+      setDragging(true);
+    },
+    onDragOver: (event: DragEvent<HTMLDivElement>) => {
+      if (!dragHasFiles(event)) return;
+      event.preventDefault();
+      event.dataTransfer.dropEffect = "copy";
+    },
+    onDragLeave: (event: DragEvent<HTMLDivElement>) => {
+      if (!dragHasFiles(event)) return;
+      dragDepth.current = Math.max(0, dragDepth.current - 1);
+      if (dragDepth.current === 0) setDragging(false);
+    },
+    onDrop: (event: DragEvent<HTMLDivElement>) => {
+      if (!dragHasFiles(event)) return;
+      event.preventDefault();
+      dragDepth.current = 0;
+      setDragging(false);
+      void upload(Array.from(event.dataTransfer.files));
+    },
+  };
+
+  const state = todoState(todo);
+  const done = state === "done";
   const due = dueState(todo, today);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(todo.title);
@@ -334,12 +480,23 @@ function TodoRow({
 
   const meta = done
     ? `Done${todo.completedByName ? ` by ${todo.completedByName}` : ""}`
-    : todo.createdByName
-      ? `Added by ${todo.createdByName}`
-      : null;
+    : state === "in_progress"
+      ? `Started by ${todo.startedByName ?? "someone"}`
+      : todo.createdByName
+        ? `Added by ${todo.createdByName}`
+        : null;
 
   return (
-    <div className={cx(styles.row, done && styles.rowDone)} data-todo={todo.id}>
+    <div
+      className={cx(
+        styles.row,
+        done && styles.rowDone,
+        state === "in_progress" && styles.rowInProgress,
+        dragging && styles.rowDropping,
+      )}
+      data-todo={todo.id}
+      {...dropHandlers}
+    >
       <Checkbox
         checked={done}
         aria-label={done ? `Mark "${todo.title}" as not done` : `Mark "${todo.title}" as done`}
@@ -362,7 +519,30 @@ function TodoRow({
             {todo.title}
           </span>
         )}
-        {meta ? <span className={styles.meta}>{meta}</span> : null}
+        <span className={styles.metaRow}>
+          {done ? null : (
+            <button
+              type="button"
+              className={cx(styles.statusButton, state === "in_progress" && styles.inProgress)}
+              aria-pressed={state === "in_progress"}
+              aria-label={
+                state === "in_progress"
+                  ? `"${todo.title}" is in progress. Mark as not started`
+                  : `Mark "${todo.title}" as in progress`
+              }
+              title={state === "in_progress" ? "Mark as not started" : "Mark as in progress"}
+              onClick={() => onChange({ inProgress: state !== "in_progress" })}
+            >
+              {state === "in_progress" ? (
+                <CircleDot size={12} strokeWidth={ICON_STROKE} aria-hidden />
+              ) : (
+                <Play size={11} strokeWidth={ICON_STROKE} aria-hidden />
+              )}
+              {state === "in_progress" ? "In progress" : "Start"}
+            </button>
+          )}
+          {meta ? <span className={styles.meta}>{meta}</span> : null}
+        </span>
       </div>
 
       <div className={styles.assignee}>
@@ -442,9 +622,37 @@ function TodoRow({
       </div>
 
       <div className={styles.actions}>
+        <IconButton
+          aria-label={`Attach files to "${todo.title}"`}
+          title="Attach files (or drop them on this to-do)"
+          size="sm"
+          icon={<Paperclip {...ICON} />}
+          onClick={picker.open}
+        />
+        {picker.input}
         {!done ? <IconButton aria-label={`Edit "${todo.title}"`} size="sm" icon={<Pencil {...ICON} />} onClick={startEdit} /> : null}
         <IconButton aria-label={`Remove "${todo.title}"`} size="sm" icon={<Trash2 {...ICON} />} onClick={onRemove} />
       </div>
+
+      {todo.assetIds.length > 0 || uploads.uploads.length > 0 ? (
+        <div className={styles.rowAttachments}>
+          <AttachmentStrip
+            assetIds={todo.assetIds}
+            assetsById={assetsById}
+            assetsLoading={assetsLoading}
+            uploads={uploads.uploads}
+            onRemove={(id) => onChange({ assetIds: todo.assetIds.filter((existing) => existing !== id) })}
+            onDismissUpload={uploads.dismiss}
+          />
+        </div>
+      ) : null}
+
+      {dragging ? (
+        <div className={styles.dropHint} aria-hidden>
+          <Upload size={14} strokeWidth={ICON_STROKE} />
+          Drop to attach to this to-do
+        </div>
+      ) : null}
     </div>
   );
 }

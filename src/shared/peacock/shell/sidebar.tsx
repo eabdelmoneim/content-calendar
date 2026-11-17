@@ -7,7 +7,7 @@ import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { cx, IconButton, Tooltip } from "@/shared/peacock/ui";
 import { AccountMenu } from "./account-menu";
 import { AccountsFooter } from "./accounts-footer";
-import { isActivePath, visibleNavGroups } from "./nav";
+import { announceNavClick, isActivePath, visibleNavGroups } from "./nav";
 import { WorkspaceSwitcher } from "./workspace-switcher";
 import styles from "./shell.module.css";
 
@@ -109,7 +109,10 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
                   aria-current={active ? "page" : undefined}
                   aria-label={collapsed ? item.label : undefined}
                   title={collapsed ? item.label : undefined}
-                  onClick={onNavigate}
+                  onClick={() => {
+                    announceNavClick(item.id);
+                    onNavigate?.();
+                  }}
                 >
                   <Icon
                     size={20}

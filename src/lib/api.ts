@@ -316,13 +316,20 @@ export function useArchiveAsset() {
 export function useAddAssetTodo() {
   const invalidate = useInvalidate(keys.todos);
   return useMutation({
-    mutationFn: (input: { title: string; dueOn: string | null; assigneeName: string | null }) =>
+    mutationFn: (input: { title: string; dueOn: string | null; assigneeName: string | null; assetIds?: string[] }) =>
       api<{ todo: AssetTodo }>("/api/asset-todos", { method: "POST", body: json(input) }).then((r) => r.todo),
     onSuccess: invalidate,
   });
 }
 
-export type AssetTodoChanges = { title?: string; dueOn?: string | null; assigneeName?: string | null; done?: boolean };
+export type AssetTodoChanges = {
+  title?: string;
+  dueOn?: string | null;
+  assigneeName?: string | null;
+  assetIds?: string[];
+  inProgress?: boolean;
+  done?: boolean;
+};
 
 /** Applies the change to the cached list at once and rolls back if the server refuses. */
 export function useUpdateAssetTodo() {
@@ -333,6 +340,7 @@ export function useUpdateAssetTodo() {
     onMutate: async ({ id, changes }) => {
       await client.cancelQueries({ queryKey: keys.todos });
       const previous = client.getQueryData<AssetTodo[]>(keys.todos);
+      const viewerName = client.getQueryData<Session>(keys.session)?.user.name ?? null;
       client.setQueryData<AssetTodo[]>(keys.todos, (list) =>
         list?.map((todo) =>
           todo.id !== id
@@ -342,6 +350,12 @@ export function useUpdateAssetTodo() {
                 ...(changes.title !== undefined ? { title: changes.title } : {}),
                 ...(changes.dueOn !== undefined ? { dueOn: changes.dueOn } : {}),
                 ...(changes.assigneeName !== undefined ? { assigneeName: changes.assigneeName } : {}),
+                ...(changes.assetIds !== undefined ? { assetIds: changes.assetIds } : {}),
+                ...(changes.inProgress !== undefined
+                  ? changes.inProgress
+                    ? { startedAt: new Date().toISOString(), startedByName: viewerName }
+                    : { startedAt: null, startedByName: null }
+                  : {}),
                 ...(changes.done !== undefined
                   ? { completedAt: changes.done ? new Date().toISOString() : null }
                   : {}),

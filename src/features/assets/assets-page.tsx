@@ -17,6 +17,7 @@ import {
 
 import { useArchiveAsset, useAssets, usePosts, useProfiles } from "@/lib/api";
 import type { Asset } from "@/lib/types";
+import { useShellPane } from "@/shared/peacock/shell/shell-title";
 import {
   Button,
   cx,
@@ -107,6 +108,7 @@ function modalIsOpen(): boolean {
  * the top-bar account selector; each image's "Used in" list names the account.
  */
 export function AssetsPage(): React.JSX.Element {
+  useShellPane();
   useAssetCommandSource();
   const router = useRouter();
   const searchParams = useSearchParams();

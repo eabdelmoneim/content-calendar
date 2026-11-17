@@ -12,11 +12,11 @@ async function todoId(params: Context["params"]): Promise<string> {
   return id;
 }
 
-/** JSON with any of { title, dueOn, assigneeName, done }. */
+/** JSON with any of { title, dueOn, assigneeName, assetIds, inProgress, done }. */
 export async function PATCH(request: Request, { params }: Context): Promise<Response> {
   return handle(async () => {
     const id = await todoId(params);
-    const body = await readJson<{ title?: unknown; dueOn?: unknown; assigneeName?: unknown; done?: unknown }>(request);
+    const body = await readJson<{ title?: unknown; dueOn?: unknown; assigneeName?: unknown; assetIds?: unknown; inProgress?: unknown; done?: unknown }>(request);
     const { workspace, user } = await currentSession();
     return { todo: await updateTodo(workspace.id, id, body ?? {}, user.name) };
   });
