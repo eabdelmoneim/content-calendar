@@ -3,7 +3,7 @@
 import { mediaKind } from "@/lib/media";
 
 import { AssetMedia } from "./asset-media";
-import { Check, Download, PenSquare, Trash2 } from "lucide-react";
+import { Check, ChevronRight, Download, PenSquare, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useId, useState, type FormEvent } from "react";
 
@@ -27,6 +27,7 @@ import {
   formatFileSize,
   inUseCopy,
   newPostHref,
+  postHref,
   uploadedLabel,
   usageChip,
 } from "./asset-presentation";
@@ -66,7 +67,12 @@ export function AssetDetailBody({
   return (
     <div className={styles.detailBody}>
       <div className={styles.detailPreview}>
-        <AssetMedia src={asset.url} mimeType={asset.mimeType} alt={asset.fileName} player />
+        <AssetMedia
+          src={asset.url}
+          mimeType={asset.mimeType}
+          alt={asset.fileName}
+          player
+        />
       </div>
 
       <RenameForm key={`${asset.id}:${asset.fileName}`} asset={asset} />
@@ -98,22 +104,35 @@ export function AssetDetailBody({
             {usedIn.map((post) => {
               const chip = usageChip(post.status);
               return (
-                <li key={post.id} className={styles.usageRow}>
-                  <span className={styles.usageText}>
-                    <span className={styles.usageTitle}>{postTitle(post)}</span>
-                    <span className={styles.usageMeta}>
-                      {[
-                        profileName(post.profileId),
-                        platformLabel(post.platform),
-                      ]
-                        .filter(Boolean)
-                        .join(" · ")}
+                <li key={post.id}>
+                  <Link
+                    className={styles.usageRow}
+                    href={postHref(post.id)}
+                    aria-label={`Open post: ${postTitle(post)}`}
+                  >
+                    <span className={styles.usageText}>
+                      <span className={styles.usageTitle}>
+                        {postTitle(post)}
+                      </span>
+                      <span className={styles.usageMeta}>
+                        {[
+                          profileName(post.profileId),
+                          platformLabel(post.platform),
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </span>
                     </span>
-                  </span>
-                  <StatusChip
-                    status={chip.status}
-                    {...(chip.label ? { label: chip.label } : {})}
-                  />
+                    <StatusChip
+                      status={chip.status}
+                      {...(chip.label ? { label: chip.label } : {})}
+                    />
+                    <ChevronRight
+                      {...ICON}
+                      className={styles.usageChevron}
+                      aria-hidden
+                    />
+                  </Link>
                 </li>
               );
             })}
@@ -134,7 +153,8 @@ export function AssetDetailBody({
           <span className={buttonStyles.icon} aria-hidden>
             <PenSquare {...ICON} />
           </span>
-          New post with this {mediaKind(asset.mimeType) === "video" ? "video" : "image"}
+          New post with this{" "}
+          {mediaKind(asset.mimeType) === "video" ? "video" : "image"}
         </Link>
       </div>
 

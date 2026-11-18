@@ -124,7 +124,7 @@ button.tileSelected:hover .thumb {
 }
 
 .thumbPending {
-  background: var(--bg-subtle);
+  background: var(--bg-hover);
 }
 
 .tileText {
@@ -367,6 +367,23 @@ button.tileSelected:hover .thumb {
   box-shadow: inset 0 0 0 var(--border-width) var(--border);
   font-size: var(--text-13);
   line-height: var(--lh-13);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 120ms ease;
+}
+
+a.usageRow:hover {
+  background: var(--bg-hover);
+}
+
+a.usageRow:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.usageChevron {
+  flex: none;
+  color: var(--fg-subtle);
 }
 
 .usageTitle {

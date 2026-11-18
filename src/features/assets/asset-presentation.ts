@@ -115,6 +115,11 @@ export function newPostHref(assetId: string): string {
   return `/posts?compose=new&asset=${encodeURIComponent(assetId)}`;
 }
 
+/** Deep link that opens a post in the composer on the Posts screen. */
+export function postHref(postId: string): string {
+  return `/posts?post=${encodeURIComponent(postId)}`;
+}
+
 /** Deep link that opens an asset's detail on the Assets screen. */
 export function assetHref(assetId: string): string {
   return `/assets?asset=${encodeURIComponent(assetId)}`;
