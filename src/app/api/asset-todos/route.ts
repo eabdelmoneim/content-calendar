@@ -11,10 +11,17 @@ export async function GET(): Promise<Response> {
   });
 }
 
-/** JSON { title, dueOn?, assigneeName?, assetIds? }. */
+/** JSON { title, dueOn?, assigneeNames?, assigneeName?, assetIds? }. */
 export async function POST(request: Request): Promise<Response> {
   return handle(async () => {
-    const body = await readJson<{ title?: unknown; dueOn?: unknown; assigneeName?: unknown; assetIds?: unknown }>(request);
+    const body = await readJson<{
+      title?: unknown;
+      dueOn?: unknown;
+      assigneeNames?: unknown;
+      /** One name; kept for older callers. */
+      assigneeName?: unknown;
+      assetIds?: unknown;
+    }>(request);
     const { workspace, user } = await currentSession();
     return { todo: await createTodo(workspace.id, body ?? {}, user.name) };
   });

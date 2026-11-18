@@ -1,10 +1,9 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { CalendarClock, CircleDot, ListTodo, Paperclip, Pencil, Play, Plus, RotateCcw, SearchX, Trash2, Upload, UserRound } from "lucide-react";
+import { CalendarClock, CircleDot, ListTodo, Paperclip, Pencil, Play, Plus, RotateCcw, SearchX, Trash2, Upload } from "lucide-react";
 import {
   useEffect,
-  useId,
   useMemo,
   useRef,
   useState,
@@ -26,9 +25,8 @@ import {
   useUpdateAssetTodo,
   type AssetTodoChanges,
 } from "@/lib/api";
-import { MAX_ASSIGNEE_NAME, MAX_TODO_ATTACHMENTS, MAX_TODO_TITLE, type Asset, type AssetTodo } from "@/lib/types";
+import { MAX_TODO_ATTACHMENTS, MAX_TODO_TITLE, type Asset, type AssetTodo } from "@/lib/types";
 import {
-  Avatar,
   Button,
   Checkbox,
   cx,
@@ -57,6 +55,7 @@ import {
   todoState,
   UNASSIGNED,
 } from "./todo-model";
+import { AssigneePicker } from "./assignee-picker";
 import { AttachmentStrip, dragHasFiles, useFilePicker } from "./todo-attachments";
 import styles from "./todo.module.css";
 
@@ -84,13 +83,12 @@ export function TodoPanel(): React.JSX.Element {
   );
   const session = useSession();
   const profiles = useProfiles();
-  const peopleListId = useId();
   // The device's calendar day; null on the server so hydration stays stable.
   const today = useSyncExternalStore(subscribeNever, () => localDayKey(), () => null);
 
   const [title, setTitle] = useState("");
   const [dueOn, setDueOn] = useState("");
-  const [assignee, setAssignee] = useState("");
+  const [assignees, setAssignees] = useState<string[]>([]);
   const [filter, setFilter] = useState<TodoFilter>("all");
   const [assigneeFilter, setAssigneeFilter] = useState<string>(EVERYONE);
   const [removing, setRemoving] = useState<AssetTodo | null>(null);
@@ -152,7 +150,7 @@ export function TodoPanel(): React.JSX.Element {
     const text = title.trim();
     if (text.length === 0) return;
     const due = dueOn || null;
-    const who = assignee.trim() || null;
+    const who = assignees;
     const files = staged;
     // Clear at once so the next item can be typed; put it back if the save fails.
     // The assignee stays, since people often add several items for one person.
@@ -160,7 +158,7 @@ export function TodoPanel(): React.JSX.Element {
     setDueOn("");
     setStaged([]);
     add.mutate(
-      { title: text, dueOn: due, assigneeName: who, ...(files.length > 0 ? { assetIds: files } : {}) },
+      { title: text, dueOn: due, assigneeNames: who, ...(files.length > 0 ? { assetIds: files } : {}) },
       {
         onError: () => {
           setTitle((current) => (current === "" ? text : current));
@@ -200,16 +198,13 @@ export function TodoPanel(): React.JSX.Element {
           maxLength={MAX_TODO_TITLE}
           onChange={(event) => setTitle(event.target.value)}
         />
-        <Input
-          aria-label="Assign to"
-          placeholder="Assign to"
-          icon={<UserRound size={14} strokeWidth={ICON_STROKE} />}
-          list={peopleListId}
-          autoComplete="off"
-          fieldClassName={styles.addAssignee}
-          value={assignee}
-          maxLength={MAX_ASSIGNEE_NAME}
-          onChange={(event) => setAssignee(event.target.value)}
+        <AssigneePicker
+          variant="field"
+          className={styles.addAssignee}
+          label="Assign to"
+          options={people}
+          value={assignees}
+          onChange={setAssignees}
         />
         <Input
           type="date"
@@ -235,10 +230,6 @@ export function TodoPanel(): React.JSX.Element {
         >
           Add
         </Button>
-        <datalist id={peopleListId}>
-          {/* Suggestions come from cached client data, so they wait for hydration. */}
-          {today === null ? null : people.map((name) => <option key={name} value={name} />)}
-        </datalist>
       </form>
       {staged.length > 0 || newUploads.uploads.length > 0 ? (
         <div className={styles.stagedRow}>
@@ -344,7 +335,7 @@ export function TodoPanel(): React.JSX.Element {
                 <TodoRow
                   todo={todo}
                   today={today}
-                  peopleListId={peopleListId}
+                  people={people}
                   assetsById={assetsById}
                   assetsLoading={assetsQuery.isPending}
                   onAttach={(uploaded) => attach(todo.id, uploaded)}
@@ -397,7 +388,7 @@ function useUploadProblems(problem: string | null, clear: () => void): void {
 function TodoRow({
   todo,
   today,
-  peopleListId,
+  people,
   assetsById,
   assetsLoading,
   onAttach,
@@ -406,7 +397,7 @@ function TodoRow({
 }: {
   todo: AssetTodo;
   today: string | null;
-  peopleListId: string;
+  people: readonly string[];
   assetsById: ReadonlyMap<string, Asset>;
   assetsLoading: boolean;
   onAttach: (uploaded: Asset[]) => void;
@@ -546,41 +537,14 @@ function TodoRow({
       </div>
 
       <div className={styles.assignee}>
-        {editingAssignee ? (
-          <Input
-            autoFocus
-            aria-label={`Assign "${todo.title}" to`}
-            placeholder="Name, or empty"
-            list={peopleListId}
-            autoComplete="off"
-            fieldClassName={styles.assigneeEdit}
-            defaultValue={todo.assigneeName ?? ""}
-            maxLength={MAX_ASSIGNEE_NAME}
-            onBlur={(event) => {
-              setEditingAssignee(false);
-              const value = event.target.value.trim() || null;
-              if (value !== todo.assigneeName) onChange({ assigneeName: value });
-            }}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") event.currentTarget.blur();
-              if (event.key === "Escape") setEditingAssignee(false);
-            }}
-          />
-        ) : (
-          <button
-            type="button"
-            className={cx(styles.assigneeButton, todo.assigneeName === null && styles.unassigned)}
-            aria-label={todo.assigneeName ? `Assigned to ${todo.assigneeName}. Reassign` : "Assign someone"}
-            onClick={() => setEditingAssignee(true)}
-          >
-            {todo.assigneeName ? (
-              <Avatar name={todo.assigneeName} size={20} decorative />
-            ) : (
-              <UserRound size={13} strokeWidth={ICON_STROKE} aria-hidden />
-            )}
-            <span className={styles.assigneeName}>{todo.assigneeName ?? "Unassigned"}</span>
-          </button>
-        )}
+        <AssigneePicker
+          variant="chip"
+          label={`Assign "${todo.title}" to`}
+          placeholder="Unassigned"
+          options={people}
+          value={todo.assigneeNames}
+          onChange={(names) => onChange({ assigneeNames: names })}
+        />
       </div>
 
       <div className={styles.due}>

@@ -78,8 +78,8 @@ export type AssetTodo = {
   title: string;
   /** Calendar day (YYYY-MM-DD) it should be finished by. */
   dueOn: string | null;
-  /** Who is on the hook for it; a person's name, or null when unassigned. */
-  assigneeName: string | null;
+  /** Who is on the hook for it, in display order; empty when unassigned. */
+  assigneeNames: string[];
   /** Files attached to it, in order: ids of Assets library items. */
   assetIds: string[];
   /** When someone marked it in progress (null when not started). Stays set once done. */
@@ -94,6 +94,8 @@ export type AssetTodo = {
 
 export const MAX_TODO_TITLE = 500;
 export const MAX_ASSIGNEE_NAME = 120;
+/** People one to-do can be on at once. */
+export const MAX_ASSIGNEES = 6;
 export const MAX_TODO_ATTACHMENTS = 10;
 
 export type FollowerSnapshot = {

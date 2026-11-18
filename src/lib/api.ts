@@ -316,7 +316,7 @@ export function useArchiveAsset() {
 export function useAddAssetTodo() {
   const invalidate = useInvalidate(keys.todos);
   return useMutation({
-    mutationFn: (input: { title: string; dueOn: string | null; assigneeName: string | null; assetIds?: string[] }) =>
+    mutationFn: (input: { title: string; dueOn: string | null; assigneeNames: string[]; assetIds?: string[] }) =>
       api<{ todo: AssetTodo }>("/api/asset-todos", { method: "POST", body: json(input) }).then((r) => r.todo),
     onSuccess: invalidate,
   });
@@ -325,7 +325,7 @@ export function useAddAssetTodo() {
 export type AssetTodoChanges = {
   title?: string;
   dueOn?: string | null;
-  assigneeName?: string | null;
+  assigneeNames?: string[];
   assetIds?: string[];
   inProgress?: boolean;
   done?: boolean;
@@ -349,7 +349,7 @@ export function useUpdateAssetTodo() {
                 ...todo,
                 ...(changes.title !== undefined ? { title: changes.title } : {}),
                 ...(changes.dueOn !== undefined ? { dueOn: changes.dueOn } : {}),
-                ...(changes.assigneeName !== undefined ? { assigneeName: changes.assigneeName } : {}),
+                ...(changes.assigneeNames !== undefined ? { assigneeNames: changes.assigneeNames } : {}),
                 ...(changes.assetIds !== undefined ? { assetIds: changes.assetIds } : {}),
                 ...(changes.inProgress !== undefined
                   ? changes.inProgress

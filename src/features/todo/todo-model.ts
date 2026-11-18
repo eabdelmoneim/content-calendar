@@ -89,7 +89,7 @@ export function assigneeSuggestions(
   };
   add(viewerName);
   for (const todo of todos) {
-    add(todo.assigneeName);
+    for (const name of todo.assigneeNames) add(name);
     add(todo.createdByName);
     add(todo.completedByName);
     add(todo.startedByName);
@@ -104,6 +104,6 @@ export function assigneeSuggestions(
 
 export function filterByAssignee(todos: readonly AssetTodo[], filter: AssigneeFilter): AssetTodo[] {
   if (filter === EVERYONE) return [...todos];
-  if (filter === UNASSIGNED) return todos.filter((todo) => todo.assigneeName === null);
-  return todos.filter((todo) => todo.assigneeName !== null && sameName(todo.assigneeName, filter));
+  if (filter === UNASSIGNED) return todos.filter((todo) => todo.assigneeNames.length === 0);
+  return todos.filter((todo) => todo.assigneeNames.some((name) => sameName(name, filter)));
 }

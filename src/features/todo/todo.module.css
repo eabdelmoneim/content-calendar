@@ -434,3 +434,173 @@
     margin-left: 14px;
   }
 }
+
+/* "Assign to": the same dropdown of people, as a field that holds several. */
+.assigneeField {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  height: var(--control-md);
+  min-width: 0;
+  padding: 0 var(--space-2);
+  border: var(--border-width) solid var(--border-control);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  box-shadow: var(--shadow-control);
+  color: var(--fg-muted);
+  font-family: var(--font-sans);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.assigneeField:hover {
+  border-color: var(--border-strong);
+}
+
+.assigneeField:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-ring);
+}
+
+.assigneeFieldEmpty {
+  color: var(--fg-placeholder);
+}
+
+.assigneeFieldName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The dropdown itself: one tick box per person. */
+.pickerPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 240px;
+}
+
+.pickerList {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-height: 240px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.pickerOption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 32px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.pickerOption:hover {
+  background: var(--bg-muted);
+}
+
+.pickerOptionFull {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pickerOptionName {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--fg);
+  font-size: var(--text-13);
+  line-height: var(--lh-13);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pickerAdd {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 32px;
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--accent-fg);
+  font-family: var(--font-sans);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+  text-align: left;
+  cursor: pointer;
+}
+
+.pickerAdd:hover:not(:disabled) {
+  background: var(--bg-muted);
+}
+
+.pickerAdd:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pickerEmpty {
+  padding: 6px var(--space-2);
+  color: var(--fg-subtle);
+  font-size: var(--text-12);
+  line-height: var(--lh-12);
+}
+
+.pickerFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: 0 var(--space-2) var(--space-1);
+}
+
+.pickerHint {
+  color: var(--fg-subtle);
+  font-size: var(--text-11);
+  line-height: var(--lh-11);
+}
+
+.pickerClear {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent-fg);
+  font-family: var(--font-sans);
+  font-size: var(--text-11);
+  line-height: var(--lh-11);
+  cursor: pointer;
+}
+
+/* The chip on a to-do row: avatars at a glance, names on hover. */
+.assignee .assigneeField {
+  width: 180px;
+}
+
+@media (max-width: 767px) {
+  .assigneeField {
+    height: var(--touch-min);
+  }
+
+  .pickerPanel {
+    width: min(280px, calc(100vw - var(--space-8)));
+  }
+
+  .assignee .assigneeField {
+    width: auto;
+    min-width: 140px;
+  }
+}
