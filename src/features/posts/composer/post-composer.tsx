@@ -274,14 +274,8 @@ export function PostComposer({
         setError("Write something before scheduling.");
         return;
       }
-      if (characterCount > limit) {
-        setError(
-          platform === "x"
-            ? `X posts are limited to ${X_STANDARD_LIMIT} characters without X Premium. Shorten it by ${characterCount - limit}.`
-            : `LinkedIn posts are limited to ${LINKEDIN_LIMIT.toLocaleString("en-US")} characters.`,
-        );
-        return;
-      }
+      // Over the limit is allowed: the counter turns red, but saving and
+      // scheduling go through (X Premium accounts can post long).
     }
     if (mediaIssue) {
       setError(mediaIssue);
